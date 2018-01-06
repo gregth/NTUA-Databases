@@ -1,12 +1,12 @@
 const express = require('express');
 const mysql = require('mysql');
+const config = require('./config.json');
 
-const PORT = 3001;
-
+const dbConfig = config.db;
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
+    host: dbConfig.host,
+    user: dbConfig.user,
+    password: dbConfig.pass,
 });
 
 const app = express();
@@ -15,5 +15,5 @@ app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
-app.listen(PORT);
-console.log('Express server listening on port ' + PORT + '..');
+app.listen(config.port);
+console.log('Express server listening on port ' + config.port + '..');

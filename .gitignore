@@ -5,6 +5,8 @@
 
 */node_modules
 
+api/config.json
+
 # testing
 /coverage
 
