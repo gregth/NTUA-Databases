@@ -1,0 +1,2 @@
+CREATE SCHEMA `ntua-rental` DEFAULT CHARACTER SET utf8 ;
+
