@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Checkbox from 'material-ui/Checkbox';
-import {List, ListItem} from 'material-ui/List';
-import axios from 'axios';
-import moment from 'moment';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 
@@ -95,7 +90,7 @@ class ReservationDialog extends Component {
         if (this.props.bookingStatus !== 'idle') {
             actions = null;
 
-            if (this.props.bookingStatus == 'success') {
+            if (this.props.bookingStatus === 'success') {
                 bookingMessage = (<h3>Your booking is complete! Redirecting..</h3>);
             }
         }
