@@ -1,18 +1,36 @@
 import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import Checkbox from 'material-ui/Checkbox';
 import {List, ListItem} from 'material-ui/List';
 import axios from 'axios';
 import moment from 'moment';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import ReservationDialog from './ReservationDialog';
 
 class Vehicle extends Component {
     constructor(props) {
         super(props);
 
+        const {data} = props;
         this.state = {
-            vehicle_id: props.id,
+            vehicle_id: data.vehicle_id,
             dataReady: false,
             details: null,
+			dialogOpen: false,
+            bookingStatus: 'idle',
+            reservationDetails: {
+                start_date: moment(data.start_date).format("YYYY-MM-DD HH:mm:ss"),
+                end_date: moment(data.end_date).format("YYYY-MM-DD HH:mm:ss"),
+                vehicle_id: data.vehicle_id,
+                store_id: data.store_id,
+                client_id: 11,
+                has_paid: 0,
+				company: false,
+                amount: 99,
+            },
         };
     }
 
@@ -20,6 +38,25 @@ class Vehicle extends Component {
         axios.get('http://localhost:3001/vehicles/' + this.state.vehicle_id).then(response => {
             this.setState({details: response.data[0], dataReady: true});
         });
+    }
+
+    handleDialogClose = () => {
+        this.setState({dialogOpen: false});
+    }
+
+    handleDialogOpen = () => {
+        this.setState({dialogOpen: true});
+    }
+
+    handleSubmit = (data) => {
+        this.setState({bookingStatus: 'pending'});
+        axios.post('http://localhost:3001/reservations', this.state.reservationDetails)
+            .then(response => {
+                if (response.data.reservation_number) {
+                    this.setState({bookingStatus: 'success'});
+                    setTimeout(this.props.history.push.bind(this, '/home'), 3000);
+                }
+            });
     }
 
     render() {
@@ -71,8 +108,10 @@ class Vehicle extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton backgroundColor='#090' labelColor='#fff' label='Book' fullWidth={true} />
+					<RaisedButton onClick={this.handleDialogOpen} backgroundColor='#090' labelColor='#fff' label='Book' fullWidth={true} />
 				</CardActions>
+
+                <ReservationDialog bookingStatus={this.state.bookingStatus} open={this.state.dialogOpen} handleDialogClose={this.handleDialogClose} handleDialogOpen={this.handleDialogOpen} onSubmit={this.handleSubmit}/>
             </Card>
         );
     }

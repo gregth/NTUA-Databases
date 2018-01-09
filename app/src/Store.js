@@ -48,7 +48,15 @@ class Store extends Component {
             vehicles = [1];
 
             if (vehicles.length) {
-                vehicleItems = vehicles.map((id, index) => (<Vehicle id={id} key={index} />));
+                vehicleItems = vehicles.map((id, index) => {
+                    const data = {
+                        vehicle_id: id,
+                        start_date: this.state.start_date,
+                        end_date: this.state.end_date,
+                        store_id: store.store_id,
+                    }
+                    return (<Vehicle data={data} key={index} history={this.props.history} />);
+                });
             }
         }
 
