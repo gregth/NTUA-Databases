@@ -1,7 +1,12 @@
 const Routable = require('./Routable');
 
+function order_field (field_name, order) {
+    return {field_name, order}
+};
+
 class Client extends Routable {
     async get(req, res) {
+        let result;
         let conditions = {};
         if (!req.params.clientId) {
             // Show all clients
@@ -15,15 +20,16 @@ class Client extends Routable {
             });
             console.log(conditions);
             let fields = ["first_name", "last_name", "license_id", "identity_number"];
-            let [result] = await this.db.select('clients', fields, conditions);
-            console.log(result);
-            res.send(result);
+            let orderBy = [order_field("first_name", "ASC"), order_field("last_name", "ASC")];
+            [result] = await this.db.select('clients', fields, conditions, orderBy);
         }
         else {
             // Show customer profile with selected id
             console.log(req.params.clientId);
+            [result] = await this.db.select('clients', [], [], orderBy);
         }
-        res.send('Show client profile!');
+        console.log(result);
+        res.send(result);
     }
 
     async post(req, res) {

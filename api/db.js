@@ -37,11 +37,13 @@ const connection = mysql.createConnection({
 
         //TODO: merge fieldValues and conditionValues here
 
+        let result = await connection.execute(query, fieldValues);
         return result
     }
 
-    connection.select = async function (table, fields, conditions) {
+    connection.select = async function (table, fields, conditions, orderBy) {
         let result;
+        let substitutions = [];
         let query = `SELECT `;
         if (fields && Object.keys(fields).length != 0) {
             query += fields.join(", ");
@@ -53,12 +55,25 @@ const connection = mysql.createConnection({
         if (conditions && Object.keys(conditions).length != 0){
             let [conditionPlaceholders, conditionValues] = objectToQueryFields(conditions);
             query += ` WHERE ` + conditionPlaceholders.join(" AND ");
-            result = await connection.execute(query, conditionValues);
+            substitutions.push(...conditionValues);
         }
-        else {
+
+        if (orderBy && orderBy.length != 0){
+            let order_properties = [];
+            orderBy.forEach( order_field => {
+                order_properties.push(`${order_field.field_name}  ${order_field.order}`);
+            });
+            query += ` ORDER BY ` + order_properties.join(", ");
+        }
+
+        console.log(query);
+        if (substitutions.length == 0) {
             result = await connection.execute(query);
         }
-        console.log(query);
+        else {
+            result = await connection.execute(query, substitutions);
+        }
+
         return result
     }
     return connection;
