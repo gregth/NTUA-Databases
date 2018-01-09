@@ -11,7 +11,8 @@ class Home extends Component {
         super(props);
 
         this.state = {
-            stores: null
+            stores: null,
+            reservations: null,
         };
     }
 
@@ -19,17 +20,16 @@ class Home extends Component {
         axios.get('http://localhost:3001/stores').then(response => {
             this.setState({stores: response.data});
         });
+
+        axios.get('http://localhost:3001/reservations/?client_id=11').then(response => {
+            this.setState({reservations: response.data});
+        });
     }
 
     render() {
-        const data = {
-            start_date: '11 Jan 2017',
-            end_date: '15 Jan 2017',
-            vehicle_id: 12,
-            customer_id: 33,
-            reservation_id: 2,
-            store_id: 1,
-            amount: 143.2
+        let reservationItems = [];
+        if (this.state.reservations) {
+            reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} />));
         }
 
         let storeItems = [];
@@ -44,9 +44,7 @@ class Home extends Component {
                         <div>
                             <Subheader>Reservations</Subheader>
                             <Divider />
-                            <ReservationItem data={data} />
-                            <ReservationItem data={data} />
-                            <ReservationItem data={data} />
+                            {reservationItems.length ? reservationItems : ''}
                             <div className='clear' />
                             <Subheader>Available stores</Subheader>
                             <Divider />

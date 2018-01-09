@@ -11,25 +11,25 @@ class ReservationItem extends Component {
             dataReady: false,
             store: null,
             vehicle: null,
-            reservation: props.data,
+            reservation: props.reservation,
         }
     }
 
     componentWillMount() {
-        const {data} = this.props;
+        const {reservation} = this.state;
 
-        if (!data.store_id || !data.vehicle_id) {
+        if (!reservation.store_id || !reservation.vehicle_id) {
             throw new Error('No store or vehicle id were defined.');
         }
 
         Promise.all([
-            axios.get('http://localhost:3001/stores/' + data.store_id),
-            axios.get('http://localhost:3001/vehicles/' + data.vehicle_id),
+            axios.get('http://localhost:3001/stores/' + reservation.store_id),
+            axios.get('http://localhost:3001/vehicles/' + reservation.vehicle_id),
         ]).then(([store, vehicle]) => {
             this.setState({
                 dataReady: true,
                 store: store.data[0],
-                vehicle: vehicle.data,
+                vehicle: vehicle.data[0],
             });
         }).catch(err => {
             console.log(err);
