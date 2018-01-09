@@ -1,28 +1,30 @@
 const Routable = require('./Routable');
 const order_field = require('../lib').order_field;
 
-class Client extends Routable {
+class Reservation extends Routable {
     async get(req, res) {
         let result;
         let conditions = {};
         if (!req.params.clientId) {
-            var allowed_search_keys = ["identity_number", "first_name", "last_name"];
+            var allowed_search_keys = ["client_id", "first_name", "last_name", "store_id"];
             conditions = this.filter_keys(req.query, allowed_search_keys);
             console.log(conditions);
 
-            let fields = ["first_name", "last_name", "license_id", "identity_number"];
-            let orderBy = [order_field("first_name", "ASC"), order_field("last_name", "ASC")];
-            [result] = await this.db.select('clients', fields, conditions, orderBy);
+            let orderBy = [order_field("start_date", "ASC")];
+            [result] = await this.db.select('reservations', null, conditions, orderBy);
         }
         else {
-            [result] = await this.db.select('clients', [], {client_id: req.params.clientId});
+            [result] = await this.db.select('reservations', [], {reservation_id: req.params.reservationId}, []);
         }
         console.log(result);
         res.send(result);
     }
 
     async post(req, res) {
+        var allowed_search_keys = ["client_id", "vehicle_id", "start_date", "end_date"];
+        conditions = this.filter_keys(req.query, allowed_search_keys);
         let param = {
+            license_id: req.body["license_id"],
             identity_number: req.body["identity_number"],
             first_name: req.body["first_name"],
             last_name: req.body["last_name"],
@@ -68,4 +70,5 @@ class Client extends Routable {
     }
 }
 
-module.exports = Client;
+module.exports = Reservation;
+
