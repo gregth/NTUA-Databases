@@ -27,7 +27,7 @@ class StoreItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton fullWidth={true} label='View vehicles' />
+					<RaisedButton fullWidth={true} href={'/store/' + store.store_id} label='View vehicles' />
 				</CardActions>
             </Card>
         );

@@ -4,15 +4,28 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
 import axios from 'axios';
 import moment from 'moment';
+import ReservationDialog from './ReservationDialog';
 
 class Vehicle extends Component {
     constructor(props) {
         super(props);
 
+        const {data} = props;
         this.state = {
-            vehicle_id: props.id,
+            vehicle_id: data.vehicle_id,
             dataReady: false,
             details: null,
+			dialogOpen: false,
+            bookingStatus: 'idle',
+            reservationDetails: {
+                start_date: moment(data.start_date).format("YYYY-MM-DD HH:mm:ss"),
+                end_date: moment(data.end_date).format("YYYY-MM-DD HH:mm:ss"),
+                vehicle_id: data.vehicle_id,
+                store_id: data.store_id,
+                client_id: 11,
+                has_paid: 0,
+				company: false,
+            },
         };
     }
 
@@ -20,6 +33,34 @@ class Vehicle extends Component {
         axios.get('http://localhost:3001/vehicles/' + this.state.vehicle_id).then(response => {
             this.setState({details: response.data[0], dataReady: true});
         });
+    }
+
+    handleDialogClose = () => {
+        this.setState({dialogOpen: false});
+    }
+
+    handleDialogOpen = () => {
+        this.setState({dialogOpen: true});
+    }
+
+    handleSubmit = (data) => {
+        this.setState({bookingStatus: 'pending'});
+        const price = this.state.details.price;
+        const start_date = moment(this.state.reservationDetails.start_date);
+        const end_date = moment(this.state.reservationDetails.end_date);
+        const totalDays = Math.abs(end_date.diff(start_date, 'days'));
+        const amount = totalDays * price
+
+        const postData = this.state.reservationDetails;
+        postData.amount = amount;
+
+        axios.post('http://localhost:3001/reservations', postData)
+            .then(response => {
+                if (response.data.reservation_number) {
+                    this.setState({bookingStatus: 'success'});
+                    setTimeout(this.props.history.push.bind(this, '/home'), 3000);
+                }
+            });
     }
 
     render() {
@@ -71,8 +112,10 @@ class Vehicle extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton backgroundColor='#090' labelColor='#fff' label='Book' fullWidth={true} />
+					<RaisedButton onClick={this.handleDialogOpen} backgroundColor='#090' labelColor='#fff' label='Book' fullWidth={true} />
 				</CardActions>
+
+                <ReservationDialog bookingStatus={this.state.bookingStatus} open={this.state.dialogOpen} handleDialogClose={this.handleDialogClose} handleDialogOpen={this.handleDialogOpen} onSubmit={this.handleSubmit}/>
             </Card>
         );
     }
