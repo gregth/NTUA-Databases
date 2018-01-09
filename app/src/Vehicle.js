@@ -25,7 +25,6 @@ class Vehicle extends Component {
                 client_id: 11,
                 has_paid: 0,
 				company: false,
-                amount: 99,
             },
         };
     }
@@ -46,7 +45,16 @@ class Vehicle extends Component {
 
     handleSubmit = (data) => {
         this.setState({bookingStatus: 'pending'});
-        axios.post('http://localhost:3001/reservations', this.state.reservationDetails)
+        const price = this.state.details.price;
+        const start_date = moment(this.state.reservationDetails.start_date);
+        const end_date = moment(this.state.reservationDetails.end_date);
+        const totalDays = Math.abs(end_date.diff(start_date, 'days'));
+        const amount = totalDays * price
+
+        const postData = this.state.reservationDetails;
+        postData.amount = amount;
+
+        axios.post('http://localhost:3001/reservations', postData)
             .then(response => {
                 if (response.data.reservation_number) {
                     this.setState({bookingStatus: 'success'});
