@@ -3,6 +3,7 @@ import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Car
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
 import axios from 'axios';
+import moment from 'moment';
 
 class ReservationItem extends Component {
     constructor(props) {
@@ -42,7 +43,7 @@ class ReservationItem extends Component {
         }
 
         const {reservation, store, vehicle} = this.state;
-        const dates = `${reservation.start_date} - ${reservation.end_date}`; 
+        const dates = `${moment(reservation.start_date).format('ll')} - ${moment(reservation.end_date).format('ll')}`;
         const store_address = `${store.street_name} ${store.street_number}, ${store.postal_code} ${store.city}, ${store.country}`;
         const vehicle_name = `${vehicle.brand} ${vehicle.model}`;
 
