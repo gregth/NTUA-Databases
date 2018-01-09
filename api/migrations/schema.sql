@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-08 15:19:49 +0000
+# Generation Time: 2018-01-09 18:21:07 +0000
 # ************************************************************
 
 
@@ -71,19 +71,10 @@ CREATE TABLE `employees` (
   UNIQUE KEY `identity_number_UNIQUE` (`identity_number`),
   UNIQUE KEY `license_id_UNIQUE` (`license_id`),
   KEY `store_id_idx` (`store_id`),
-  CONSTRAINT `license_id` FOREIGN KEY (`license_id`) REFERENCES `licenses` (`license_id`) ON UPDATE NO ACTION,
-  CONSTRAINT `store_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`) ON UPDATE NO ACTION
+  CONSTRAINT `employee_license_id` FOREIGN KEY (`license_id`) REFERENCES `licenses` (`license_id`) ON UPDATE NO ACTION,
+  CONSTRAINT `employee_store_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`) ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `employees` WRITE;
-/*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-
-INSERT INTO `employees` (`employee_id`, `license_id`, `store_id`, `identity_number`, `first_name`, `last_name`, `street_name`, `postal_code`, `city`, `country`, `street_number`, `role`, `start_date`, `end_date`)
-VALUES
-	(2,NULL,1,'ok','Greg','themis','Kokino',145,'ath','gr','23','Admin','1111-11-11 11:11:11',NULL);
-
-/*!40000 ALTER TABLE `employees` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table licenses
@@ -138,17 +129,21 @@ DROP TABLE IF EXISTS `reservations`;
 
 CREATE TABLE `reservations` (
   `reservation_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `customer_id` int(10) unsigned NOT NULL,
+  `client_id` int(10) unsigned NOT NULL,
   `vehicle_id` int(10) unsigned NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `has_paid` tinyint(4) NOT NULL DEFAULT '0',
+  `store_id` int(10) unsigned NOT NULL,
+  `amount` double NOT NULL,
   PRIMARY KEY (`reservation_id`),
   UNIQUE KEY `reservation_id_UNIQUE` (`reservation_id`),
-  KEY `client_id_idx` (`customer_id`),
+  KEY `client_id_idx` (`client_id`),
   KEY `vehicle_id_idx` (`vehicle_id`),
-  CONSTRAINT `client_id` FOREIGN KEY (`customer_id`) REFERENCES `clients` (`client_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `vehicle_id` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicle_id`) ON UPDATE CASCADE
+  KEY `store_id_idx` (`store_id`),
+  CONSTRAINT `reservation_client_id` FOREIGN KEY (`client_id`) REFERENCES `clients` (`client_id`) ON UPDATE CASCADE,
+  CONSTRAINT `reservation_store_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`) ON UPDATE CASCADE,
+  CONSTRAINT `reservation_vehicle_id` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicle_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
