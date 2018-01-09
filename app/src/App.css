@@ -11,7 +11,7 @@ body {
     padding: 8px;
 }
 
-.reservationItem, .storeItem {
+.reservationItem, .storeItem, .vehicleItem {
     margin: 20px 20px 20px 0;
 	width: 250px;
     float: left;
@@ -29,4 +29,34 @@ a.list-right {
 
 .clear {
     clear: both;
+}
+
+.store {
+    padding: 10px;
+}
+
+.store-data {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+.store-img {
+    width: 25%;
+    max-width: 200px;
+    height: 100%;
+    float: left;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.store-img img {
+    width: 100%;
+    max-height: 143px;
+    height: auto;
+}
+
+.store-details {
+    float: right;
+    width: 70%;
 }
