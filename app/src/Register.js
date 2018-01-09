@@ -4,7 +4,8 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import $ from 'jquery';
+import axios from 'axios';
+import qs from 'qs';
 
 class Register extends Component {
     constructor(props) {
@@ -16,14 +17,25 @@ class Register extends Component {
             street_name: '',
             street_number: '',
             postal_code: '',
+            city: '',
             country: '',
-            identity_type: 1,
+            identity_type: 0,
             identity_number: '',
+            email: '',
+            password: '',
         };
     }
 
-    handleRegister() {
-        console.log('handler');
+    handleRegister = () => {
+        axios.post('http://localhost:3001/clients', qs.stringify(this.state))
+            .then(data => {
+                console.log('success');
+                console.log(data);
+            })
+            .catch(err => {
+                console.log('error');
+                console.log(err);
+            });
     }
 
     handleInputChange = (event, value) => {
@@ -44,9 +56,12 @@ class Register extends Component {
             {name: 'street_name', label: 'Street Name'},
             {name: 'street_number', label: 'Street Number'},
             {name: 'postal_code', label: 'Postal Code'},
+            {name: 'city', label: 'City'},
             {name: 'country', label: 'Country'},
             {name: 'identity_type', label: 'Identity Type', options: ['Identity Card', 'Passport']},
             {name: 'identity_number', label: 'Identification Number'},
+            {name: 'email', label: 'Email'},
+            {name: 'password', label: 'Password'},
         ];
 
         let inputElements = fields.map((item, index) => {
