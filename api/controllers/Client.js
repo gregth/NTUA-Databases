@@ -18,9 +18,7 @@ class Client extends Routable {
             [result] = await this.db.select('clients', fields, conditions, orderBy);
         }
         else {
-            // Show customer profile with selected id
-            console.log(req.params.clientId);
-            [result] = await this.db.select('clients', [], [], orderBy);
+            [result] = await this.db.select('clients', [], {client_id: req.params.clientId});
         }
         console.log(result);
         res.send(result);
