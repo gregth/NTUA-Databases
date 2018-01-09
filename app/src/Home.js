@@ -12,7 +12,7 @@ class Home extends Component {
             vehicle_id: 12,
             customer_id: 33,
             reservation_id: 2,
-            store_id: 2,
+            store_id: 1,
             amount: 143.2
         }
 
