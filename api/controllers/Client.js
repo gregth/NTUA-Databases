@@ -1,8 +1,5 @@
 const Routable = require('./Routable');
-
-function order_field (field_name, order) {
-    return {field_name, order}
-};
+const order_field = require('../lib').order_field;
 
 class Client extends Routable {
     async get(req, res) {
