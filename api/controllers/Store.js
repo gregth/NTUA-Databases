@@ -1,8 +1,17 @@
 const Routable = require('./Routable');
 
 class Store extends Routable {
-    get(req, res) {
-        res.send('Show store.');
+    async get(req, res) {
+        let result;
+        let conditions = {};
+        if (!req.params.storeId) {
+            [result] = await this.db.select('stores');
+        }
+        else {
+            [result] = await this.db.select('stores', [], {store_id: req.params.storeId}, []);
+        }
+        console.log(result);
+        res.send(result);
     }
 
     post() {
