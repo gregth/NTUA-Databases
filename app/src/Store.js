@@ -5,6 +5,7 @@ import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Vehicle from './Vehicle';
 import axios from 'axios';
+import DatePicker from 'material-ui/DatePicker';
 
 class Store extends Component {
     constructor(props) {
@@ -13,6 +14,8 @@ class Store extends Component {
         this.state = {
             dataReady: false,
             details: null,
+            start_date: null,
+            end_date: null,
         };
     }
 
@@ -22,6 +25,10 @@ class Store extends Component {
         axios.get('http://localhost:3001/stores/' + storeId).then(response => {
             this.setState({details: response.data[0], dataReady: true});
         });
+    }
+
+    handleDateChange(type, event, date) {
+        this.setState(state => state[type] = date);
     }
 
     render() {
@@ -34,11 +41,15 @@ class Store extends Component {
         let store_phone = '6983317150';
         let store_email = 'Kaisariani@rental.com';
 
-        let vehicles = [1];
+        let vehicles = [], vehicleItems = [];
+        if (!this.state.start_date || !this.state.end_date) {
+            vehicleItems = 'Please choose start and end date to show the available vehicles.';
+        } else {
+            vehicles = [1];
 
-        let vehicleItems = [];
-        if (vehicles.length) {
-            vehicleItems = vehicles.map((id, index) => (<Vehicle id={id} key={index} />));
+            if (vehicles.length) {
+                vehicleItems = vehicles.map((id, index) => (<Vehicle id={id} key={index} />));
+            }
         }
 
         return (
@@ -78,6 +89,18 @@ class Store extends Component {
 
                     <Subheader style={{marginTop: '20px'}}>Vehicles</Subheader>
                     <Divider />
+					<DatePicker
+						floatingLabelText='Start Date'
+						minDate={new Date()}
+                        style={{float: 'left', marginRight: '20px'}}
+                        onChange={this.handleDateChange.bind(this, 'start_date')}
+					/>
+					<DatePicker
+						floatingLabelText='End Date'
+                        onChange={this.handleDateChange.bind(this, 'end_date')}
+						minDate={this.state.start_date || new Date()}
+					/>
+                    <div className='clear' />
                     {vehicleItems.length ? vehicleItems : ''}
                     <div className='clear' />
 				</CardText>
