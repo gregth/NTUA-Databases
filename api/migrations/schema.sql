@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-09 18:46:18 +0000
+# Generation Time: 2018-01-09 20:02:50 +0000
 # ************************************************************
 
 
@@ -44,6 +44,16 @@ CREATE TABLE `clients` (
   UNIQUE KEY `license_id_UNIQUE` (`license_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `clients` WRITE;
+/*!40000 ALTER TABLE `clients` DISABLE KEYS */;
+
+INSERT INTO `clients` (`client_id`, `license_id`, `identity_number`, `first_name`, `last_name`, `street_name`, `postal_code`, `city`, `country`, `street_number`, `email`, `password`)
+VALUES
+	(11,NULL,'AA0000','Themistoklis','Papameletiou','Gravias',16122,'Kaisariani','Greece','16','themicp@gmail.com','123456'),
+	(12,NULL,'BB1111','Grigorios','Thanasoulas','STREETTT',11111,'Athens','Greece','99','gregth@gmail.com','98765');
+
+/*!40000 ALTER TABLE `clients` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table employees
@@ -146,6 +156,15 @@ CREATE TABLE `reservations` (
   CONSTRAINT `reservation_vehicle_id` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicle_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `reservations` WRITE;
+/*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
+
+INSERT INTO `reservations` (`reservation_id`, `client_id`, `vehicle_id`, `start_date`, `end_date`, `has_paid`, `store_id`, `amount`)
+VALUES
+	(1,11,1,'2018-01-05','2018-01-19',0,1,159.3);
+
+/*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table stores
@@ -203,6 +222,15 @@ CREATE TABLE `vehicles` (
   UNIQUE KEY `plate_number_UNIQUE` (`plate_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `vehicles` WRITE;
+/*!40000 ALTER TABLE `vehicles` DISABLE KEYS */;
+
+INSERT INTO `vehicles` (`vehicle_id`, `last_seen_at`, `store_id`, `type`, `brand`, `model`, `cc`, `horse_power`, `plate_number`, `buy_date`, `kilometers`, `last_service`, `next_service`, `insurance_expiration`)
+VALUES
+	(1,1,1,'car','Tesla','Model 3',0,0,'ABC0395','2017-09-08',10985,'2017-09-08','2018-09-08','2018-09-08');
+
+/*!40000 ALTER TABLE `vehicles` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 
