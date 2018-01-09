@@ -43,7 +43,15 @@ class Vehicle extends Routable {
         res.send(result);
     }
 
-    post() {
+    async post(req, res) {
+        var needed_parameters = ["last_seen_at", "store_id", "type",
+            "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
+            "kilometers", "last_service", "next_service", "insurance_expiration"];
+        let details = this.filter_keys(req.body, needed_parameters);
+        console.log(details);
+        let [result] = await this.db.insert('vehicles', details)
+        res.send({vehicle_id: result.insertId});
+        res.status(200);
     }
 
     put(req, res) {
