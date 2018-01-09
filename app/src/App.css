@@ -2,11 +2,31 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.register {
-    width: 80%;
-    margin: auto;
+.App {
+    width: 90%;
+    margin: 20px auto 0 auto;
 }
 
 .cardMedia {
     padding: 8px;
+}
+
+.reservationItem {
+    margin: 20px 20px 20px 0;
+	width: 250px;
+    float: left;
+}
+
+.list-right {
+    float: right;
+    font-size: 13px;
+}
+
+a.list-right {
+    font-size: 15px;
+    color: dodgerblue;
+}
+
+.clear {
+    clear: both;
 }
