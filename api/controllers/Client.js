@@ -7,7 +7,6 @@ class Client extends Routable {
 
     async post(req, res) {
         let param = {
-            license_id: req.body["license_id"],
             identity_number: req.body["identity_number"],
             first_name: req.body["first_name"],
             last_name: req.body["last_name"],
