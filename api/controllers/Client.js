@@ -9,16 +9,10 @@ class Client extends Routable {
         let result;
         let conditions = {};
         if (!req.params.clientId) {
-            // Show all clients
-            var search_keys = [
-                "identity_number", "first_name", "last_name"
-            ];
-            search_keys.forEach(search_key => {
-                if (req.query[search_key]) {
-                    conditions[search_key] = req.query[search_key];
-                }
-            });
+            var allowed_search_keys = ["identity_number", "first_name", "last_name"];
+            conditions = this.filter_keys(req.query, allowed_search_keys);
             console.log(conditions);
+
             let fields = ["first_name", "last_name", "license_id", "identity_number"];
             let orderBy = [order_field("first_name", "ASC"), order_field("last_name", "ASC")];
             [result] = await this.db.select('clients', fields, conditions, orderBy);

@@ -28,6 +28,16 @@ class Routable {
     delete() {
         throw 'Not implemented delete()';
     }
+
+    filter_keys(params, allowed_keys) {
+        let filtered_params = {};
+        allowed_keys.forEach(key => {
+            if (params[key]) {
+                filtered_params[key] = params[key];
+            }
+        });
+        return filtered_params;
+    }
 }
 
 module.exports = Routable;
