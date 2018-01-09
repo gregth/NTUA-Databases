@@ -7,7 +7,7 @@
 
 api/config.json
 
-.swp
+.*.swp
 
 # testing
 /coverage
