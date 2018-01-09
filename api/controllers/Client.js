@@ -1,7 +1,28 @@
 const Routable = require('./Routable');
 
 class Client extends Routable {
-    get(req, res) {
+    async get(req, res) {
+        let conditions = {};
+        if (!req.params.clientId) {
+            // Show all clients
+            var search_keys = [
+                "identity_number", "first_name", "last_name"
+            ];
+            search_keys.forEach(search_key => {
+                if (req.query[search_key]) {
+                    conditions[search_key] = req.query[search_key];
+                }
+            });
+            console.log(conditions);
+            let fields = ["first_name", "last_name", "license_id", "identity_number"];
+            let [result] = await this.db.select('clients', fields, conditions);
+            console.log(result);
+            res.send(result);
+        }
+        else {
+            // Show customer profile with selected id
+            console.log(req.params.clientId);
+        }
         res.send('Show client profile!');
     }
 
@@ -40,11 +61,15 @@ class Client extends Routable {
             email: req.body["email"],
             password: req.body["password"],
         };
-        await this.db.update('clients', param)
+        await this.db.update('clients', param);
         res.send('Update client profile!');
     }
 
     delete(req, res) {
+        let param = {
+            client_id: req.body["client_id"],
+        };
+        //await this.db.delete('clients', param);
         res.send('Delete client profile!');
     }
 }
