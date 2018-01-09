@@ -16,31 +16,16 @@ class Reservation extends Routable {
         else {
             [result] = await this.db.select('reservations', [], {reservation_id: req.params.reservationId}, []);
         }
-        console.log(result);
         res.send(result);
     }
 
     async post(req, res) {
-        var allowed_search_keys = ["client_id", "vehicle_id", "start_date", "end_date"];
-        conditions = this.filter_keys(req.query, allowed_search_keys);
-        let param = {
-            license_id: req.body["license_id"],
-            identity_number: req.body["identity_number"],
-            first_name: req.body["first_name"],
-            last_name: req.body["last_name"],
-            street_name: req.body["street_name"],
-            street_number: req.body["street_number"],
-            postal_code : req.body["postal_code"],
-            city: req.body["city"],
-            country: req.body["country"],
-            email: req.body["email"],
-            password: req.body["password"],
-        };
-        console.log(param);
-        let result = await this.db.insert('clients', param)
-        res.send('Create client profile!');
-        //console.log(result);
-
+        var needed_parameters = ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date"];
+        let details = this.filter_keys(req.body, needed_parameters);
+        console.log(details);
+        let [result] = await this.db.insert('reservations', details)
+        res.send({reservation_number: result.insertId});
+        res.status(200);
     }
 
     async put(req, res) {
