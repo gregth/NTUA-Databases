@@ -24,6 +24,10 @@ class Reservation extends Routable {
         let details = this.filter_keys(req.body, needed_parameters);
         console.log(details);
         let [result] = await this.db.insert('reservations', details)
+        if (result.affectedRows != 1) {
+            res.status(500);
+            res.send("Error");
+        }
         res.send({reservation_number: result.insertId});
         res.status(200);
     }
