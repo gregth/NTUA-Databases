@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-09 18:21:07 +0000
+# Generation Time: 2018-01-09 18:46:18 +0000
 # ************************************************************
 
 
@@ -160,6 +160,7 @@ CREATE TABLE `stores` (
   `postal_code` varchar(45) NOT NULL,
   `city` varchar(45) NOT NULL,
   `country` varchar(45) NOT NULL,
+  `store_name` varchar(45) NOT NULL,
   PRIMARY KEY (`store_id`),
   UNIQUE KEY `store_id_UNIQUE` (`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -167,9 +168,11 @@ CREATE TABLE `stores` (
 LOCK TABLES `stores` WRITE;
 /*!40000 ALTER TABLE `stores` DISABLE KEYS */;
 
-INSERT INTO `stores` (`store_id`, `street_number`, `street_name`, `postal_code`, `city`, `country`)
+INSERT INTO `stores` (`store_id`, `street_number`, `street_name`, `postal_code`, `city`, `country`, `store_name`)
 VALUES
-	(1,'6A','Kokkinopoulou','15773','Athens','GR');
+	(1,'6A','Kokkinopoulou','15773','Athens','GR','Rental Kokkinopoulou\n'),
+	(2,'72','Leof. Vasilissis Sofias','11521','Athens','GR','Rental Kentro'),
+	(3,'414','Mesogion Av.','15343','Agia Paraskevi, Athens','GR','Rental Agia Paraskevi');
 
 /*!40000 ALTER TABLE `stores` ENABLE KEYS */;
 UNLOCK TABLES;
