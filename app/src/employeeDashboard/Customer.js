@@ -133,9 +133,10 @@ class Customer extends Component {
 
         const licensePermits = ['car', 'moto', 'truck', 'minivan', 'atv'].map((item, index) => (
             <Checkbox
+                key={index}
                 label={item}
                 name={item}
-                checked={this.state.license[item]}
+                checked={!!this.state.license[item]}
                 onCheck={this.updateLicensePermit.bind(this)}
             />
         ));
