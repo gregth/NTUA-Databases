@@ -5,7 +5,7 @@ class Reservation extends Routable {
     async get(req, res) {
         let result;
         let conditions = {};
-        if (!req.params.clientId) {
+        if (!req.params.reservationId) {
             var allowed_search_keys = ["client_id", "first_name", "last_name", "store_id"];
             conditions = this.filter_keys(req.query, allowed_search_keys);
             console.log(conditions);
@@ -14,7 +14,11 @@ class Reservation extends Routable {
             [result] = await this.db.select('reservations', null, conditions, orderBy);
         }
         else {
-            [result] = await this.db.select('reservations', [], {reservation_id: req.params.reservationId}, []);
+            [result] = await this.db.select(`reservations JOIN clients
+                ON clients.client_id = reservations.client_id`, 
+                ["reservations.store_id", "clients.first_name", "clients.last_name",
+                    "reservations.start_date", "reservations.end_date"],
+                {reservation_id: req.params.reservationId}, []);
         }
         res.send(result);
     }
@@ -23,7 +27,7 @@ class Reservation extends Routable {
         var needed_parameters = ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date"];
         let details = this.filter_keys(req.body, needed_parameters);
         console.log(details);
-        let [result] = await this.db.insert('reservations', details)
+        let [result] = await this.db.insert(`reservations`, details)
         if (result.affectedRows != 1) {
             res.status(500);
             res.send("Error");
@@ -33,21 +37,22 @@ class Reservation extends Routable {
     }
 
     async put(req, res) {
-        let param = {
-            license_id: req.body["license_id"],
-            identity_number: req.body["identity_number"],
-            first_name: req.body["first_name"],
-            last_name: req.body["last_name"],
-            street_name: req.body["street_name"],
-            street_number: req.body["street_number"],
-            postal_code : req.body["postal_code"],
-            city: req.body["city"],
-            country: req.body["country"],
-            email: req.body["email"],
-            password: req.body["password"],
-        };
-        await this.db.update('clients', param);
-        res.send('Update client profile!');
+        if (!req.params.reservationId) {
+            res.status(500);
+            res.send("Error");
+        }
+        var needed_parameters = ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date"];
+        let details = this.filter_keys(req.body, needed_parameters);
+        console.log(details);
+        let conditions = {reservation_id: req.params.reservationId};
+        let [result] = await this.db.update('reservations', details, conditions)
+        if (result.affectedRows != 1) {
+            res.status(500);
+            res.send("Error");
+        }
+        //res.send({reservation_number: result.insertId});
+        res.send(result);
+        res.status(200);
     }
 
     delete(req, res) {

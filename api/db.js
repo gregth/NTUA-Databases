@@ -27,17 +27,16 @@ const connection = mysql.createConnection({
 
     connection.update = async function (table, values, conditions) {
         let [placeholders, fieldValues] = objectToQueryFields(values);
-        let query = `UPDATE ${table} SET ` + placeholders.join(',');
+        let substitutions = fieldValues;
+        let query = `UPDATE ${table} SET ` + placeholders.join(', ');
         if (conditions && Object.keys(conditions).length != 0){
             let [conditionPlaceholders, conditionValues] = objectToQueryFields(conditions);
             query += ` WHERE ` + conditionPlaceholders.join(" AND ");
+            substitutions.push(...conditionValues);    
         }
 
         console.log(query);
-
-        //TODO: merge fieldValues and conditionValues here
-
-        let result = await connection.execute(query, fieldValues);
+        let result = await connection.execute(query, substitutions);
         return result
     }
 
