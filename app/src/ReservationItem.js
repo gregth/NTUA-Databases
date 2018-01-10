@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
+import EditReservationDialog from './EditReservationDialog';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -9,6 +10,7 @@ class ReservationItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
+			dialogOpen: false,
             dataReady: false,
             store: null,
             vehicle: null,
@@ -21,6 +23,18 @@ class ReservationItem extends Component {
             .then(() => {
                 this.props.refreshData();
             });
+    }
+
+    handleEditSubmit = () => {
+        console.log(this.state.reservation);
+    }
+
+    handleDialogClose = () => {
+        this.setState({dialogOpen: false});
+    }
+
+    handleDialogOpen = () => {
+        this.setState({dialogOpen: true});
     }
 
     componentWillMount() {
@@ -86,9 +100,11 @@ class ReservationItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton label='Edit' />
+					<RaisedButton label='Edit' onClick={this.handleDialogOpen}/>
 					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Cancel' onClick={this.handleCancel} />
 				</CardActions>
+
+                <EditReservationDialog open={this.state.dialogOpen} handleDialogClose={this.handleDialogClose} handleDialogOpen={this.handleDialogOpen} refreshData={this.props.refreshData} reservation={this.state.reservation} />
             </Card>
         );
     }
