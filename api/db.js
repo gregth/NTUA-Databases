@@ -73,7 +73,21 @@ const connection = mysql.createConnection({
             result = await connection.execute(query, substitutions);
         }
 
-        return result
+        return result;
+    }
+
+    connection.delete = async function (table, conditions) {
+        let query = `DELETE FROM  ${table}`;
+        let substitutions = [];
+        if (conditions && Object.keys(conditions).length != 0){
+            let [conditionPlaceholders, conditionValues] = objectToQueryFields(conditions);
+            query += ` WHERE ` + conditionPlaceholders.join(" AND ");
+            substitutions.push(...conditionValues);    
+        }
+
+        console.log(query);
+        let result = await connection.execute(query, substitutions);
+        return result;
     }
     return connection;
 })
