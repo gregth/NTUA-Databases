@@ -18,6 +18,7 @@ class Customer extends Component {
             start_date: null,
             end_date: null,
             reservations: null,
+            rentals: null,
             license:{
                 license_number: '',
                 car: 0,
@@ -45,6 +46,10 @@ class Customer extends Component {
 
         axios.get('http://localhost:3001/reservations/?client_id=' + customerId).then(response => {
             this.setState({reservations: response.data});
+        });
+
+        axios.get('http://localhost:3001/rentals/?client_id=' + customerId).then(response => {
+            this.setState({rentals: response.data});
         });
     }
 
@@ -104,9 +109,11 @@ class Customer extends Component {
             return 'Loading..';
         }
 
+        console.log(this.state.rentals);
+
         let reservationItems = [];
         if (this.state.reservations) {
-            reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} refreshData={this.loadData.bind(this)} />));
+            reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} refreshData={this.loadData.bind(this)} employeeId={2} />));
         }
 
         const fields = [
@@ -166,6 +173,9 @@ class Customer extends Component {
                     <RaisedButton label='Save' style={{margin: 'auto', display:
                     'block', width: '100px'}}
                     onClick={this.handleLicenseSave}/>
+
+                    <Subheader style={{marginTop: '20px'}}>Active rentals</Subheader>
+                    <Divider />
 
                     <Subheader style={{marginTop: '20px'}}>Reservations</Subheader>
                     <Divider />
