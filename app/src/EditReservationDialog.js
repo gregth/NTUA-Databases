@@ -45,7 +45,7 @@ class EditReservationDialog extends Component {
     render() {
 		let actions = [
 			<FlatButton
-				label='Cancel'
+				label='Close'
 				onClick={this.props.handleDialogClose}
 			/>,
 			<FlatButton
