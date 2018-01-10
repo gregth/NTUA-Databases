@@ -14,10 +14,12 @@ class Client extends Routable {
                 orderBy: [order_field('first_name', 'ASC'), order_field('last_name', 'ASC')],
             },
             post: {
-                fields: ['identity_number', 'first_name', 'last_name', 'street_name', 'street_number', 'postal_code', 'city', 'country', 'email', 'password'],
+                fields: ['identity_number', 'first_name', 'last_name', 'street_name',
+                    'street_number', 'postal_code', 'city', 'country', 'email', 'password'],
             },
             put: {
-                fields: ['license_id', 'identity_number', 'first_name', 'last_name', 'street_name', 'street_number', 'postal_code', 'city', 'country'],
+                fields: ['license_id', 'identity_number', 'first_name', 'last_name',
+                    'street_name', 'street_number', 'postal_code', 'city', 'country'],
             },
             delete: {
                 queryField: 'client_id',
