@@ -28,6 +28,8 @@ class Routable {
         let orderBy = methodOptions.orderBy;
         let joins = methodOptions.joins; 
         let table = this.options.table;
+        let keys_lookup_table = methodOptions.keys_lookup_table;
+        console.log(methodOptions);
         if (methodOptions.table_alias) {
             table += ` AS ${methodOptions.table_alias}`;
         }
@@ -35,6 +37,13 @@ class Routable {
         if (!req.params[optionalField.query]) {
             var allowed_search_keys = methodOptions.allowed_search_keys;
             conditions = this.filter_keys(req.query, allowed_search_keys);
+            if (keys_lookup_table) {
+                Object.keys(keys_lookup_table).forEach(key => {
+                    conditions[keys_lookup_table[key] + `.` + key] = conditions[key];
+                    delete conditions[key];
+                });
+                
+            }
             [result] = await this.db.select(table, fields, conditions, orderBy, joins);
         }
         else {

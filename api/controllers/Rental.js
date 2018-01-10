@@ -11,6 +11,7 @@ class Rental extends Routable {
             get: {
                 table_alias: 'r',
                 allowed_search_keys: ['client_id'],
+                keys_lookup_table: {client_id: 'rv'},
                 fields:  [],
                 orderBy: [order_field('r.start_date', 'ASC')],
                 joins: [{ type: 'JOIN', table: 'reservations AS rv', on: 'rv.reservation_id = r.reservation_id'},

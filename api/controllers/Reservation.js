@@ -10,6 +10,7 @@ class Reservation extends Routable {
             optionalField: {query: 'reservationId', field_name: 'reservation_id'},
             get: {
                 table_alias: 'r',
+                keys_lookup_table: {client_id: 'r'},
                 allowed_search_keys: ["client_id", "first_name", "last_name", "store_id"],
                 fields:  ["r.reservation_id", "r.store_id", "c.first_name", "c.last_name", "r.start_date", "r.end_date"],
                 orderBy: [order_field('r.start_date', 'ASC')],
