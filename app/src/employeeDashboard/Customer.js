@@ -4,10 +4,11 @@ import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
+import Checkbox from 'material-ui/Checkbox';
 import ReservationItem from '../ReservationItem';
 import axios from 'axios';
 
-class Store extends Component {
+class Customer extends Component {
     constructor(props) {
         super(props);
 
@@ -17,6 +18,14 @@ class Store extends Component {
             start_date: null,
             end_date: null,
             reservations: null,
+            license:{
+                license_number: '',
+                car: 0,
+                moto: 0,
+                truck: 0,
+                minivan: 0,
+                atv: 0,
+            }
         };
     }
 
@@ -24,7 +33,14 @@ class Store extends Component {
         const {customerId} = this.props.match.params;
 
         axios.get('http://localhost:3001/clients/' + customerId).then(response => {
-            this.setState({details: response.data, dataReady: true});
+            const client = response.data;
+            this.setState({details: client, dataReady: true});
+
+            if (client.license_id) {
+                axios.get('http://localhost:3001/licenses/' + client.license_id).then(response => {
+                    this.setState({license: response.data});
+                });
+            }
         });
 
         axios.get('http://localhost:3001/reservations/?client_id=' + customerId).then(response => {
@@ -36,8 +52,51 @@ class Store extends Component {
         this.loadData();
     }
 
-    handleDateChange(type, event, date) {
-        this.setState(state => state[type] = date);
+    updateLicensePermit(event, value) {
+        const state = this.state;
+        state.license[event.target.name] = +value;
+        this.setState(state);
+    }
+
+    handleInputChange = (event, value) => {
+        event.persist();
+        if (event.target.name == 'license_number') {
+            this.setState(state => state.license[event.target.name] = value);
+        } else {
+            this.setState(state => state.details[event.target.name] = value);
+        }
+    }
+
+    handleCustomerSave = () => {
+        const {customerId} = this.props.match.params;
+
+        const data = Object.assign({}, this.state.details);
+        delete data.license_id; // license will be edited from elsewere
+        axios.put('http://localhost:3001/clients/' + customerId, data)
+            .then(res => {
+                alert('User has been updated successfully.');
+            });
+    }
+
+    handleLicenseSave = () => {
+        const {customerId} = this.props.match.params;
+
+        if (!this.state.details.license_id) {
+            axios.post('http://localhost:3001/licenses/', this.state.license)
+                .then(res => {
+                    const insertId = res.data.resource_id;
+
+                    return axios.put('http://localhost:3001/clients/' + customerId, {license_id: insertId});
+                })
+                .then(res => {
+                    alert('The license has been inserted successfully.');
+                });
+        } else {
+            axios.put('http://localhost:3001/licenses/' + this.state.license.license_id, this.state.license)
+                .then(res => {
+                    alert('License information has been updated successfully.');
+                });
+        }
     }
 
     render() {
@@ -72,6 +131,16 @@ class Store extends Component {
             />
         ));
 
+        const licensePermits = ['car', 'moto', 'truck', 'minivan', 'atv'].map((item, index) => (
+            <Checkbox
+                key={index}
+                label={item}
+                name={item}
+                checked={!!this.state.license[item]}
+                onCheck={this.updateLicensePermit.bind(this)}
+            />
+        ));
+
         return (
             <Card className='store'>
 				<CardText style={{paddingTop: 0}}>
@@ -79,9 +148,24 @@ class Store extends Component {
                     <Divider />
                     {customerDetails}
                     <div className='clear' />
-                    <RaisedButton label='Save'
-                    style={{margin: 'auto', display: 'block', width: '100px'}}
-                    onClick={this.handleCustomerSearch}/>
+                    <RaisedButton label='Save' style={{margin: 'auto', display:
+                    'block', width: '100px'}}
+                    onClick={this.handleCustomerSave}/>
+
+                    <Subheader style={{marginTop: '20px'}}>License</Subheader>
+                    <Divider />
+                    <TextField
+                        style={{width: 160, marginRight: '10px', float: 'left'}}
+                        name='license_number'
+                        onChange={this.handleInputChange}
+                        value={this.state.license.license_number}
+                        floatingLabelText='License Number'
+                        floatingLabelFixed={true}
+                    />
+                    {licensePermits}
+                    <RaisedButton label='Save' style={{margin: 'auto', display:
+                    'block', width: '100px'}}
+                    onClick={this.handleLicenseSave}/>
 
                     <Subheader style={{marginTop: '20px'}}>Reservations</Subheader>
                     <Divider />
@@ -93,4 +177,4 @@ class Store extends Component {
     }
 }
 
-export default Store;
+export default Customer;
