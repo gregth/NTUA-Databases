@@ -17,12 +17,13 @@ class Routable {
         }
     }
 
+
     async get(req, res) {
         let result;
         let conditions = {};
 
+        let optionalField = this.options.optionalField;
         let methodOptions = this.options.get;
-        let optionalField = methodOptions.optionalField;
         if (!req.params[optionalField.query]) {
             var allowed_search_keys = methodOptions.allowed_search_keys;
             conditions = this.filter_keys(req.query, allowed_search_keys);
@@ -49,12 +50,24 @@ class Routable {
 
     async post(req, res) {
         let methodOptions = this.options.post;
+        let optionalField = this.options.optionalField;
+
+        if (req.params[optionalField.query]) {
+            res.status(500);
+			res.send("You can not post on individual resources");
+            return;
+        }
 
         let params = this.filter_keys(req.body, methodOptions.fields);
         try {
-            let result = await this.db.insert(this.options.table, params)
+            let [result] = await this.db.insert(this.options.table, params)
+            if (result.affectedRows != 1) {
+                res.status(500);
+                res.send("Error");
+                return;
+            }
+            res.send({resource_id: result.insertId});
             res.status(200);
-            res.send('Success.');
         } catch(e) {
             console.log(e);
             res.status(500);
@@ -63,13 +76,30 @@ class Routable {
     }
 
     async put(req, res) {
+        let optionalField = this.options.optionalField;
+
+        if (!req.params[optionalField.query]) {
+            res.status(500);
+			res.send("You must specify individual resource to update");
+            return;
+        }
         let methodOptions = this.options.put;
 
         let params = this.filter_keys(req.body, methodOptions.fields);
         try {
-            let result = await this.db.update(this.options.table, params);
+            let condition = {};
+            condition[optionalField.field_name] = req.params[optionalField.query];
+            console.log(condition);
+            let [result] = await this.db.update(this.options.table, params, condition);
             res.status(200);
-            res.send('Success.');
+            if (result.affectedRows != 1) {
+                res.status(500);
+                res.send("Error");
+                return;
+            }
+            res.status(200);
+            res.send(result);
+            return;
         } catch(e) {
             console.log(e);
             res.status(500);
@@ -79,13 +109,27 @@ class Routable {
 
     async delete(req, res) {
         let methodOptions = this.options.delete;
+        let optionalField = this.options.optionalField;
+
+        if (!req.params[optionalField.query]) {
+            res.status(500);
+            res.send("You must specify unique resource to delete");
+            return;
+        }
 
         let param = {};
-        param[methodOptions.queryField] = req.body[methodOptions.queryField]
+        param[optionalField.field_name] = req.params[optionalField.query]
+
         try {
-            let result = await this.db.delete('clients', param);
+            let [result] = await this.db.delete(this.options.table, param);
+            console.log(result);
+            if (result.affectedRows != 1) {
+                res.status(500);
+                res.send("Error");
+                return;
+            }
             res.status(200);
-            res.send('Success.');
+            res.send('Succesfule deleted resource.');
         } catch(e) {
             console.log(e);
             res.status(500);
