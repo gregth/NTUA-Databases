@@ -55,12 +55,21 @@ class Reservation extends Routable {
         res.status(200);
     }
 
-    delete(req, res) {
-        let param = {
-            client_id: req.body["client_id"],
-        };
-        //await this.db.delete('clients', param);
-        res.send('Delete client profile!');
+    async delete(req, res) {
+        if (!req.params.reservationId) {
+            res.status(500);
+            res.send("Error");
+        }
+        let conditions = {reservation_id: req.params.reservationId};
+        let [result] = await this.db.delete('reservations', conditions)
+        if (result.affectedRows != 1) {
+            res.status(500);
+            res.send("Error");
+        }
+        //res.send({reservation_number: result.insertId});
+        console.log(result);
+        res.send("Succesfully deleted reservation");
+        res.status(200);
     }
 }
 
