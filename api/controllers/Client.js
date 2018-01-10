@@ -10,7 +10,8 @@ class Client extends Routable {
             optionalField: {query: 'clientId', field_name: 'client_id'},
             get: {
                 allowed_search_keys: ['client_id', 'identity_number', 'first_name', 'last_name'],
-                fields: ['first_name', 'last_name', 'license_id', 'identity_number'],
+                fields: ['license_id', 'identity_number', 'first_name', 'last_name', 'street_name',
+                    'street_number', 'postal_code', 'city', 'country', 'email'],
                 orderBy: [order_field('first_name', 'ASC'), order_field('last_name', 'ASC')],
             },
             post: {
