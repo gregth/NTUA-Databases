@@ -8,6 +8,16 @@ class Vehicle extends Routable {
         if (!req.params.vehicleId) {
             var required_search_keys = ["start_date", "end_date", "store_id", "brand", "model", "type"];
             filters = this.filter_keys(req.query, required_search_keys);
+            console.log(filters);
+            if (!filters.start_date ||
+                !filters.end_date ||
+                !filters.store_id
+            ) {
+                res.status(500);
+                res.send("Not enough criteria");
+                return;
+            }
+
             let query = `SELECT * FROM vehicles
                 WHERE store_id = ?
                     AND vehicles.vehicle_id NOT IN 
@@ -21,6 +31,7 @@ class Vehicle extends Routable {
                 filters.start_date, filters.end_date,
                 filters.start_date, filters.start_date, 
                 filters.end_date, filters.end_date];
+
             if (filters.brand) {
                 query += ` AND brand = ?`;
                 substitutions.push(filters.brand);
@@ -33,33 +44,92 @@ class Vehicle extends Routable {
                 query += ` AND type = ?`;
                 substitutions.push(filters.type);
             }
-            console.log(filters);
             [result] = await this.db.execute(query, substitutions);
         }
         else {
             [result] = await this.db.select('vehicles', [], {vehicle_id: req.params.vehicleId}, []);
+        console.log(result);
         }
-        //console.log(result);
+
+        if (result.length == 0) {
+            res.status(404);
+            res.send("Vehicle not found");
+            return;
+        }
+        res.status(200);
         res.send(result);
+        return;
     }
 
     async post(req, res) {
+		if (req.params.vehicleId) {
+			res.status(500);
+			res.send("Operation not permited on individual vehicles");
+            return;
+		}
+
+        var needed_parameters = ["last_seen_at", "store_id", "type",
+            "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
+            "kilometers", "last_service", "next_service", "insurance_expiration"];
+		let details = this.filter_keys(req.body, needed_parameters);
+		let [result] = await this.db.insert(`vehicles`, details)
+
+		console.log(result);
+		if (result.affectedRows != 1) {
+			res.status(500);
+			res.send("Error");
+            return;
+		}
+		res.send({vehicle_id: result.insertId});
+		res.status(200);
+    }
+
+
+    async put(req, res) {
+        if (!req.params.vehicleId) {
+            res.status(500);
+			res.send("You must specify vehicle to update");
+            return;
+        }
+
         var needed_parameters = ["last_seen_at", "store_id", "type",
             "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
             "kilometers", "last_service", "next_service", "insurance_expiration"];
         let details = this.filter_keys(req.body, needed_parameters);
         console.log(details);
-        let [result] = await this.db.insert('vehicles', details)
-        res.send({vehicle_id: result.insertId});
+        let conditions = {vehicle_id: req.params.vehicleId};
+        let [result] = await this.db.update('vehicles', details, conditions)
+
+		console.log(result);
+        if (result.affectedRows != 1) {
+            res.status(500);
+            res.send("Error");
+            return;
+        }
         res.status(200);
+        res.send(result);
+        return;
     }
 
-    put(req, res) {
-        res.send('Update vehicle profile!');
-    }
+    async delete(req, res) {
+        if (!req.params.vehicleId) {
+            res.status(500);
+            res.send("You must specify vehicle to delete");
+            return;
+        }
 
-    delete(req, res) {
-        res.send('Delete vehicle profile!');
+        let conditions = {vehicle_id: req.params.vehicleId};
+        console.log(conditions);
+        let [result] = await this.db.delete('vehicles', conditions)
+
+		console.log(result);
+        if (result.affectedRows != 1) {
+            res.status(500);
+            res.send("Error");
+            return;
+        }
+        res.send("Succesfully deleted vehicle");
+        res.status(200);
     }
 }
 

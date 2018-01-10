@@ -20,37 +20,58 @@ class Reservation extends Routable {
                     "reservations.start_date", "reservations.end_date"],
                 {reservation_id: req.params.reservationId}, []);
         }
+
+        console.log(result);
+        if (result.length == 0) {
+            res.status(404);
+            res.send("Reservation not found");
+            return;
+        }
+        res.status(200);
         res.send(result);
+        return;
     }
 
     async post(req, res) {
-        var needed_parameters = ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date"];
-        let details = this.filter_keys(req.body, needed_parameters);
-        console.log(details);
-        let [result] = await this.db.insert(`reservations`, details)
-        if (result.affectedRows != 1) {
-            res.status(500);
-            res.send("Error");
-        }
-        res.send({reservation_number: result.insertId});
-        res.status(200);
+		if (req.params.reservationId) {
+			res.status(500);
+			res.send("Operation not permited on individual reservations");
+            return;
+		}
+
+		var needed_parameters = ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date"];
+		let details = this.filter_keys(req.body, needed_parameters);
+		console.log(details);
+		let [result] = await this.db.insert(`reservations`, details)
+
+		if (result.affectedRows != 1) {
+			res.status(500);
+			res.send("Error");
+            return;
+		}
+		res.status(200);
+		res.send({reservation_number: result.insertId});
+        return;
     }
 
     async put(req, res) {
         if (!req.params.reservationId) {
             res.status(500);
-            res.send("Error");
+			res.send("You must specify reservation to update");
+            return;
         }
+
         var needed_parameters = ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date"];
         let details = this.filter_keys(req.body, needed_parameters);
         console.log(details);
         let conditions = {reservation_id: req.params.reservationId};
         let [result] = await this.db.update('reservations', details, conditions)
+
         if (result.affectedRows != 1) {
             res.status(500);
             res.send("Error");
+            return;
         }
-        //res.send({reservation_number: result.insertId});
         res.send(result);
         res.status(200);
     }
@@ -58,16 +79,18 @@ class Reservation extends Routable {
     async delete(req, res) {
         if (!req.params.reservationId) {
             res.status(500);
-            res.send("Error");
+            res.send("You must specify reservation to delete");
+            return;
         }
+
         let conditions = {reservation_id: req.params.reservationId};
         let [result] = await this.db.delete('reservations', conditions)
+
         if (result.affectedRows != 1) {
             res.status(500);
             res.send("Error");
+            return;
         }
-        //res.send({reservation_number: result.insertId});
-        console.log(result);
         res.send("Succesfully deleted reservation");
         res.status(200);
     }
