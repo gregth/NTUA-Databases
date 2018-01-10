@@ -54,7 +54,7 @@ class ReservationItem extends Component {
         ]).then(([store, vehicle]) => {
             this.setState({
                 dataReady: true,
-                store: store.data[0],
+                store: store.data,
                 vehicle: vehicle.data[0],
             });
         }).catch(err => {
