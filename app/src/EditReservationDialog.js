@@ -27,6 +27,9 @@ class EditReservationDialog extends Component {
 
     handleSubmit = () => {
         const {reservation} = this.state;
+        reservation.start_date = moment(reservation.start_date).format('YYYY-MM-DD HH:mm:ss')
+        reservation.end_date = moment(reservation.end_date).format('YYYY-MM-DD HH:mm:ss')
+
         axios.put('http://localhost:3001/reservations/' + reservation.reservation_id, reservation)
             .then(() => {
                 this.props.handleDialogClose();
@@ -36,7 +39,7 @@ class EditReservationDialog extends Component {
 
     handleDateChange(type, event, date) {
         const state = this.state;
-        this.state.reservation[type] = moment(date).format("YYYY-MM-DD HH:mm:ss");
+        this.state.reservation[type] = date;
         this.state.reservation.amount = this.getTotalAmount(state);
 
         this.setState(state);

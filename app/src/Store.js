@@ -23,7 +23,7 @@ class Store extends Component {
         const {storeId} = this.props.match.params;
 
         axios.get('http://localhost:3001/stores/' + storeId).then(response => {
-            this.setState({details: response.data[0], dataReady: true});
+            this.setState({details: response.data, dataReady: true});
         });
     }
 
