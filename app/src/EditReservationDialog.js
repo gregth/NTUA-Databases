@@ -11,8 +11,18 @@ class EditReservationDialog extends Component {
         super(props);
 
         this.state = {
-            reservation: props.reservation,
+            reservation: Object.assign({}, props.reservation),
         };
+    }
+
+    getTotalAmount(state) {
+        const price = this.props.dailyPrice;
+        const start_date = moment(state.reservation.start_date);
+        const end_date = moment(state.reservation.end_date);
+        const totalDays = Math.abs(end_date.diff(start_date, 'days'));
+        const amount = totalDays * price
+
+        return amount;
     }
 
     handleSubmit = () => {
@@ -25,7 +35,11 @@ class EditReservationDialog extends Component {
     }
 
     handleDateChange(type, event, date) {
-        this.setState(state => state.reservation[type] = moment(date).format("YYYY-MM-DD HH:mm:ss"));
+        const state = this.state;
+        this.state.reservation[type] = moment(date).format("YYYY-MM-DD HH:mm:ss");
+        this.state.reservation.amount = this.getTotalAmount(state);
+
+        this.setState(state);
     }
 
     render() {
@@ -41,17 +55,6 @@ class EditReservationDialog extends Component {
 			/>,
 		];
 
-        /*
-        let bookingMessage;
-        if (this.props.bookingStatus !== 'idle') {
-            actions = null;
-
-            if (this.props.bookingStatus === 'success') {
-                bookingMessage = (<h3>Your booking is complete! Redirecting..</h3>);
-            }
-        }
-        */
-
         return (
             <Dialog
                 title='Billing Details'
@@ -63,6 +66,7 @@ class EditReservationDialog extends Component {
                 <DatePicker
                     floatingLabelText='Start Date'
                     minDate={new Date()}
+                    maxDate={new Date(this.state.reservation.end_date) || null}
                     value={new Date(this.state.reservation.start_date)}
                     style={{float: 'left', marginRight: '20px'}}
                     onChange={this.handleDateChange.bind(this, 'start_date')}
@@ -73,6 +77,7 @@ class EditReservationDialog extends Component {
                     minDate={new Date(this.state.reservation.start_date) || new Date()}
                     value={new Date(this.state.reservation.end_date)}
                 />
+                <h3>New amount: {this.state.reservation.amount} $</h3>
             </Dialog>
         );
     }

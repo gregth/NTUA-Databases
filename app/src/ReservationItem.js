@@ -18,6 +18,10 @@ class ReservationItem extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        this.setState({reservation: nextProps.reservation});
+    }
+
     handleCancel = () => {
         axios.delete('http://localhost:3001/reservations/' + this.state.reservation.reservation_id)
             .then(() => {
@@ -104,7 +108,12 @@ class ReservationItem extends Component {
 					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Cancel' onClick={this.handleCancel} />
 				</CardActions>
 
-                <EditReservationDialog open={this.state.dialogOpen} handleDialogClose={this.handleDialogClose} handleDialogOpen={this.handleDialogOpen} refreshData={this.props.refreshData} reservation={this.state.reservation} />
+                <EditReservationDialog open={this.state.dialogOpen}
+                handleDialogClose={this.handleDialogClose}
+                handleDialogOpen={this.handleDialogOpen}
+                refreshData={this.props.refreshData}
+                dailyPrice={this.state.vehicle.price}
+                reservation={this.state.reservation} />
             </Card>
         );
     }
