@@ -140,7 +140,7 @@ class Routable {
     filter_keys(params, allowed_keys) {
         let filtered_params = {};
         allowed_keys.forEach(key => {
-            if (params[key]) {
+            if (typeof params[key] != 'undefined') {
                 filtered_params[key] = params[key];
             }
         });
