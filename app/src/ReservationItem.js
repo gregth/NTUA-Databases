@@ -29,6 +29,19 @@ class ReservationItem extends Component {
             });
     }
 
+    handleNewRental = () => {
+        const rentalData = {
+            start_date: moment().format("YYYY-MM-DD HH:mm:ss"),
+            reservation_id: this.state.reservation.reservation_id,
+            deliverer_employee_id: this.props.employeeId,
+        };
+        axios.post('http://localhost:3001/rentals/', rentalData)
+            .then(res => {
+                console.log(res);
+                //this.props.refreshData();
+            });
+    }
+
     handleEditSubmit = () => {
         console.log(this.state.reservation);
     }
@@ -104,8 +117,16 @@ class ReservationItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton label='Edit' onClick={this.handleDialogOpen}/>
-					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Cancel' onClick={this.handleCancel} />
+                    <RaisedButton label='Edit'
+                    onClick={this.handleDialogOpen}/>
+                    <RaisedButton
+                    backgroundColor='#900' labelColor='#fff' label='Cancel'
+                    onClick={this.handleCancel} />
+                    {this.props.employeeId ? (
+                        <RaisedButton backgroundColor='#080' labelColor='#fff'
+                        label='Start' onClick={this.handleNewRental}
+                        style={{marginTop: '8px'}}/>
+                    ) : ''}
 				</CardActions>
 
                 <EditReservationDialog open={this.state.dialogOpen}
