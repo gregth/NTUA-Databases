@@ -5,6 +5,7 @@ import ReservationItem from './ReservationItem';
 import StoreItem from './StoreItem';
 import Subheader from 'material-ui/Subheader';
 import axios from 'axios';
+import moment from 'moment';
 
 class Home extends Component {
     constructor(props) {
@@ -22,7 +23,13 @@ class Home extends Component {
         });
 
         axios.get('http://localhost:3001/reservations/?client_id=11').then(response => {
-            this.setState({reservations: response.data});
+            const reservations = response.data;
+            reservations.forEach(item => {
+                item.start_date = moment(item.start_date).format("YYYY-MM-DD HH:mm:ss");
+                item.end_date = moment(item.end_date).format("YYYY-MM-DD HH:mm:ss");
+            });
+
+            this.setState({reservations});
         });
     }
 

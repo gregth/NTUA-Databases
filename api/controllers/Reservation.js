@@ -22,11 +22,6 @@ class Reservation extends Routable {
         }
 
         console.log(result);
-        if (result.length == 0) {
-            res.status(404);
-            res.send("Reservation not found");
-            return;
-        }
         res.status(200);
         res.send(result);
         return;
