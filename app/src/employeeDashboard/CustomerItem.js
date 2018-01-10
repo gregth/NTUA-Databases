@@ -6,34 +6,11 @@ import axios from 'axios';
 import moment from 'moment';
 
 class CustomerItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-			dialogOpen: false,
-        }
-    }
-
-    componentWillReceiveProps(nextProps){
-        this.setState({reservation: nextProps.reservation});
-    }
-
     handleRemove = () => {
         axios.delete('http://localhost:3001/clients/' + this.props.customer.client_id)
             .then(() => {
                 this.props.refreshData();
             });
-    }
-
-    handleEditSubmit = () => {
-        console.log(this.state.reservation);
-    }
-
-    handleDialogClose = () => {
-        this.setState({dialogOpen: false});
-    }
-
-    handleDialogOpen = () => {
-        this.setState({dialogOpen: true});
     }
 
     render() {
@@ -67,7 +44,7 @@ class CustomerItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton label='Edit' onClick={this.handleDialogOpen}/>
+					<RaisedButton href={'/employeehome/customer/' + customer.client_id} label='Edit'/>
 					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Remove' onClick={this.handleRemove} />
 				</CardActions>
             </Card>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Card, CardMedia} from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
+import { Route } from 'react-router'
 import StoreItem from '../StoreItem';
 import Subheader from 'material-ui/Subheader';
 import axios from 'axios';

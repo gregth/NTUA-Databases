@@ -14,7 +14,7 @@ class StoreItem extends Component {
         return (
             <Card className='storeItem'>
                 <CardMedia className='cardMedia'>
-                    <img src='stores/store.png' alt='store' />
+                    <img src='/stores/store.png' alt='store' />
                 </CardMedia>
 				<CardTitle title={store_name} />
 				<CardText style={{paddingTop: 0}}>

@@ -75,7 +75,7 @@ class ReservationItem extends Component {
         return (
             <Card className='reservationItem'>
                 <CardMedia className='cardMedia'>
-                    <img src='vehicles/tesla-model-3.png' alt='tesla' />
+                    <img src='/vehicles/tesla-model-3.png' alt='tesla' />
                 </CardMedia>
 				<CardTitle title={vehicle_name} />
 				<CardText style={{paddingTop: 0}}>
