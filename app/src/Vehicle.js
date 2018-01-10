@@ -18,8 +18,8 @@ class Vehicle extends Component {
 			dialogOpen: false,
             bookingStatus: 'idle',
             reservationDetails: {
-                start_date: moment(data.start_date).format("YYYY-MM-DD HH:mm:ss"),
-                end_date: moment(data.end_date).format("YYYY-MM-DD HH:mm:ss"),
+                start_date: moment(data.start_date).startOf('day').format("YYYY-MM-DD HH:mm:ss"),
+                end_date: moment(data.end_date).startOf('day').format("YYYY-MM-DD HH:mm:ss"),
                 vehicle_id: data.vehicle_id,
                 store_id: data.store_id,
                 client_id: 11,
@@ -45,11 +45,7 @@ class Vehicle extends Component {
 
     handleSubmit = (data) => {
         this.setState({bookingStatus: 'pending'});
-        const price = this.state.details.price;
-        const start_date = moment(this.state.reservationDetails.start_date);
-        const end_date = moment(this.state.reservationDetails.end_date);
-        const totalDays = Math.abs(end_date.diff(start_date, 'days'));
-        const amount = totalDays * price
+        const amount = this.getTotalAmount();
 
         const postData = this.state.reservationDetails;
         postData.amount = amount;
@@ -63,12 +59,33 @@ class Vehicle extends Component {
             });
     }
 
+    componentWillReceiveProps(nextProps){
+        const {data} = nextProps;
+        let state = this.state;
+        state.reservationDetails.start_date = moment(data.start_date).startOf('day').format("YYYY-MM-DD HH:mm:ss");
+        state.reservationDetails.end_date = moment(data.end_date).startOf('day').format("YYYY-MM-DD HH:mm:ss");
+
+        this.setState(state);
+    }
+
+
+    getTotalAmount() {
+        const price = this.state.details.price;
+        const start_date = moment(this.state.reservationDetails.start_date);
+        const end_date = moment(this.state.reservationDetails.end_date);
+        const totalDays = Math.abs(end_date.diff(start_date, 'days'));
+        const amount = totalDays * price
+
+        return amount;
+    }
+
     render() {
         if (!this.state.dataReady) {
             return 'Loading..';
         }
 
         const vehicle = this.state.details;
+        const amount = this.getTotalAmount();
 
         return (
             <Card className='vehicleItem'>
@@ -108,6 +125,14 @@ class Vehicle extends Component {
                             style={{padding: '8px 0'}}
                         >
                             <span style={{fontWeight: 'bold'}}className='list-right'>{vehicle.price} $</span>
+                        </ListItem>
+
+						<ListItem
+                            disabled={true}
+                            primaryText='Total amount'
+                            style={{padding: '8px 0'}}
+                        >
+                            <span style={{fontWeight: 'bold'}}className='list-right'>{amount} $</span>
                         </ListItem>
                     </List>
 				</CardText>
