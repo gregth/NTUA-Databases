@@ -83,7 +83,7 @@ class Routable {
         let param = {};
         param[methodOptions.queryField] = req.body[methodOptions.queryField]
         try {
-            let result = await this.db.delete('clients', param);
+            let result = await this.db.delete(this.options.table, param);
             res.status(200);
             res.send('Success.');
         } catch(e) {
