@@ -8,7 +8,7 @@ class Client extends Routable {
         this.options = {
             table: 'clients',
             get: {
-                optionalField: 'clientId',
+                optionalField: {query: 'clientId', field_name: 'client_id'},
                 allowed_search_keys: ['client_id', 'identity_number', 'first_name', 'last_name'],
                 fields: ['first_name', 'last_name', 'license_id', 'identity_number'],
                 orderBy: [order_field('first_name', 'ASC'), order_field('last_name', 'ASC')],
