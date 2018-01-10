@@ -5,6 +5,7 @@ const Client = require('./controllers/Client');
 const Store = require('./controllers/Store');
 const Employee = require('./controllers/Employee');
 const Reservation = require('./controllers/Reservation');
+const License = require('./controllers/License');
 const bodyParser = require('body-parser');
 
 (async () => {
@@ -30,8 +31,9 @@ const bodyParser = require('body-parser');
     new Vehicle(app.route('/vehicles/:vehicleId?'))
     new Client(app.route('/clients/:clientId?'))
     new Store(app.route('/stores/:storeId?'))
-    new Employee(app.route('/employee/:employeeId?'))
+    new Employee(app.route('/employees/:employeeId?'))
     new Reservation(app.route('/reservations/:reservationId?'))
+    new License(app.route('/licenses/:licenseId?'))
 	
     app.route('/stores/:storeId/vehicles/')
         .get((req, res) => {
