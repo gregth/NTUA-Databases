@@ -2,6 +2,28 @@ const Routable = require('./Routable');
 const order_field = require('../lib').order_field;
 
 class Vehicle extends Routable {
+    constructor(router) {
+        super(router);
+
+        this.options = {
+            table: 'vehicles',
+            optionalField: {query: 'vehicleId', field_name: 'vehicle_id'},
+            post: {
+                fields: ["last_seen_at", "store_id", "type",
+                    "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
+                    "kilometers", "last_service", "next_service", "insurance_expiration"],
+            },
+            put: {
+                fields: ["last_seen_at", "store_id", "type",
+                    "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
+                    "kilometers", "last_service", "next_service", "insurance_expiration"],
+            },
+            delete: {
+                queryField: 'vehicle_id',
+            }
+        }
+    }
+
     async get(req, res) {
         let result;
         let filters;
@@ -59,77 +81,6 @@ class Vehicle extends Routable {
         res.status(200);
         res.send(result);
         return;
-    }
-
-    async post(req, res) {
-		if (req.params.vehicleId) {
-			res.status(500);
-			res.send("Operation not permited on individual vehicles");
-            return;
-		}
-
-        var needed_parameters = ["last_seen_at", "store_id", "type",
-            "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
-            "kilometers", "last_service", "next_service", "insurance_expiration"];
-		let details = this.filter_keys(req.body, needed_parameters);
-		let [result] = await this.db.insert(`vehicles`, details)
-
-		console.log(result);
-		if (result.affectedRows != 1) {
-			res.status(500);
-			res.send("Error");
-            return;
-		}
-		res.send({vehicle_id: result.insertId});
-		res.status(200);
-    }
-
-
-    async put(req, res) {
-        if (!req.params.vehicleId) {
-            res.status(500);
-			res.send("You must specify vehicle to update");
-            return;
-        }
-
-        var needed_parameters = ["last_seen_at", "store_id", "type",
-            "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
-            "kilometers", "last_service", "next_service", "insurance_expiration"];
-        let details = this.filter_keys(req.body, needed_parameters);
-        console.log(details);
-        let conditions = {vehicle_id: req.params.vehicleId};
-        let [result] = await this.db.update('vehicles', details, conditions)
-
-		console.log(result);
-        if (result.affectedRows != 1) {
-            res.status(500);
-            res.send("Error");
-            return;
-        }
-        res.status(200);
-        res.send(result);
-        return;
-    }
-
-    async delete(req, res) {
-        if (!req.params.vehicleId) {
-            res.status(500);
-            res.send("You must specify vehicle to delete");
-            return;
-        }
-
-        let conditions = {vehicle_id: req.params.vehicleId};
-        console.log(conditions);
-        let [result] = await this.db.delete('vehicles', conditions)
-
-		console.log(result);
-        if (result.affectedRows != 1) {
-            res.status(500);
-            res.send("Error");
-            return;
-        }
-        res.send("Succesfully deleted vehicle");
-        res.status(200);
     }
 }
 
