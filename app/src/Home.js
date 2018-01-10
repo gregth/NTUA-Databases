@@ -16,7 +16,7 @@ class Home extends Component {
         };
     }
 
-    componentWillMount() {
+    loadData() {
         axios.get('http://localhost:3001/stores').then(response => {
             this.setState({stores: response.data});
         });
@@ -26,10 +26,14 @@ class Home extends Component {
         });
     }
 
+    componentWillMount() {
+        this.loadData();
+    }
+
     render() {
         let reservationItems = [];
         if (this.state.reservations) {
-            reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} />));
+            reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} refreshData={this.loadData.bind(this)} />));
         }
 
         let storeItems = [];

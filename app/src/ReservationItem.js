@@ -16,6 +16,13 @@ class ReservationItem extends Component {
         }
     }
 
+    handleCancel = () => {
+        axios.delete('http://localhost:3001/reservations/' + this.state.reservation.reservation_id)
+            .then(() => {
+                this.props.refreshData();
+            });
+    }
+
     componentWillMount() {
         const {reservation} = this.state;
 
@@ -80,7 +87,7 @@ class ReservationItem extends Component {
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
 					<RaisedButton label='Edit' />
-					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Cancel' />
+					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Cancel' onClick={this.handleCancel} />
 				</CardActions>
             </Card>
         );
