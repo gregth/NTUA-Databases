@@ -24,18 +24,22 @@ class Routable {
 
         let optionalField = this.options.optionalField;
         let methodOptions = this.options.get;
+        let fields = methodOptions.fields;
+        let orderBy = methodOptions.orderBy;
+        let joins = methodOptions.joins; 
+        let table = this.options.table;
+        if (methodOptions.table_alias) {
+            table += ` AS ${methodOptions.table_alias}`;
+        }
+
         if (!req.params[optionalField.query]) {
             var allowed_search_keys = methodOptions.allowed_search_keys;
             conditions = this.filter_keys(req.query, allowed_search_keys);
-
-            let fields = methodOptions.field;
-            let orderBy = methodOptions.orderBy;
-
-            [result] = await this.db.select(this.options.table, fields, conditions, orderBy);
+            [result] = await this.db.select(table, fields, conditions, orderBy, joins);
         }
         else {
             conditions[optionalField.field_name] = req.params[optionalField.query];
-            [[result]] = await this.db.select(this.options.table, [], conditions);
+            [[result]] = await this.db.select(table, fields, conditions, orderBy, joins);
 
             if (!result) {
                 res.status(404);

@@ -42,7 +42,7 @@ const connection = mysql.createConnection({
         return result
     }
 
-    connection.select = async function (table, fields, conditions, orderBy) {
+    connection.select = async function (table, fields, conditions, orderBy, joins) {
         let result;
         let substitutions = [];
         let query = `SELECT `;
@@ -53,6 +53,11 @@ const connection = mysql.createConnection({
             query += ` *`;
         }
         query += ` FROM ${table}`;
+        if (joins) {
+            joins.forEach(join => {
+                query += ` ${join.type} ${join.table} ON ${join.on} `;
+            });
+        }
         if (conditions && Object.keys(conditions).length != 0){
             let [conditionPlaceholders, conditionValues] = objectToQueryFields(conditions);
             query += ` WHERE ` + conditionPlaceholders.join(" AND ");
