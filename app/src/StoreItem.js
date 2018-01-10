@@ -9,6 +9,8 @@ class StoreItem extends Component {
         const store_name = store.store_name;
         const store_address = `${store.street_name} ${store.street_number}, ${store.postal_code} ${store.city}, ${store.country}`;
 
+        const rootPath = this.props.rootPath || '/';
+
         return (
             <Card className='storeItem'>
                 <CardMedia className='cardMedia'>
@@ -27,7 +29,7 @@ class StoreItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton fullWidth={true} href={'/store/' + store.store_id} label='View vehicles' />
+					<RaisedButton fullWidth={true} href={rootPath + 'store/' + store.store_id} label={this.props.label || 'View vehicles'} />
 				</CardActions>
             </Card>
         );
