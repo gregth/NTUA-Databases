@@ -71,6 +71,11 @@ class RentalItem extends Component {
         const reservation_dates = `${moment(rental.reservation_start_date).format('ll')} - ${moment(rental.reservation_end_date).format('ll')}`;
         const rental_start_date = moment(rental.start_date).format('ll')
         const vehicle_name = `${vehicle.brand} ${vehicle.model}`;
+        
+        let rental_dates;
+        if (rental.end_date) {
+            rental_dates = `${moment(rental.start_date).format('ll')} - ${moment(rental.end_date).format('ll')}`;
+        }
 
         return (
             <Card className='rentalItem'>
@@ -92,11 +97,25 @@ class RentalItem extends Component {
                             style={{padding: '8px 0'}}
                             secondaryText={reservation_dates}/>
 
+                        {!this.props.rental.end_date ? (
 						<ListItem
                             disabled={true}
                             primaryText='Rental start'
                             style={{padding: '8px 0'}}
-                            secondaryText={rental_start_date}/>
+                            secondaryText={rental_start_date}/>) : (
+                        <div>
+                            <ListItem
+                                disabled={true}
+                                primaryText='Rental dates'
+                                style={{padding: '8px 0'}}
+                                secondaryText={rental_dates}/>
+
+                            <ListItem
+                                disabled={true}
+                                primaryText='Damage score'
+                                style={{padding: '8px 0'}}
+                                secondaryText={this.props.rental.damage_score + '%'}/>
+                        </div>)}
 
 						<ListItem
                             disabled={true}
@@ -108,9 +127,10 @@ class RentalItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
+                    {!this.props.rental.end_date ? (
                     <RaisedButton
                     backgroundColor='#900' labelColor='#fff' label='End rental'
-                    onClick={this.handleDialogOpen} />
+                    onClick={this.handleDialogOpen} />) : ''}
 				</CardActions>
 
                 <EndRentalDialog open={this.state.dialogOpen}
