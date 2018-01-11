@@ -5,6 +5,7 @@ import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Vehicle from './Vehicle';
 import axios from 'axios';
+import moment from 'moment';
 import DatePicker from 'material-ui/DatePicker';
 
 class Store extends Component {
@@ -16,6 +17,7 @@ class Store extends Component {
             details: null,
             start_date: null,
             end_date: null,
+            vehicles: null,
         };
     }
 
@@ -27,8 +29,26 @@ class Store extends Component {
         });
     }
 
+    searchVehicles(state) {
+        const params = {
+            start_date: moment(state.start_date).format('YYYY-MM-DD HH:mm:ss'),
+            end_date: moment(state.end_date).format('YYYY-MM-DD HH:mm:ss'),
+            store_id: this.props.match.params.storeId,
+        }
+        axios.get('http://localhost:3001/vehicles', {params})
+            .then(res => {
+                this.setState({vehicles: res.data});
+            });
+    }
+
     handleDateChange(type, event, date) {
-        this.setState(state => state[type] = date);
+        const state = this.state;
+        state[type] = date;
+        this.setState(state);
+
+        if (this.state.start_date && this.state.end_date) {
+            this.searchVehicles(state);
+        }
     }
 
     render() {
@@ -41,23 +61,17 @@ class Store extends Component {
         let store_phone = '6983317150';
         let store_email = 'Kaisariani@rental.com';
 
-        let vehicles = [], vehicleItems = [];
-        if (!this.state.start_date || !this.state.end_date) {
-            vehicleItems = 'Please choose start and end date to show the available vehicles.';
-        } else {
-            vehicles = [1];
-
-            if (vehicles.length) {
-                vehicleItems = vehicles.map((id, index) => {
-                    const data = {
-                        vehicle_id: id,
-                        start_date: this.state.start_date,
-                        end_date: this.state.end_date,
-                        store_id: store.store_id,
-                    }
-                    return (<Vehicle data={data} key={index} history={this.props.history} />);
-                });
-            }
+        let vehicleItems = null;
+        if (this.state.vehicles) {
+            vehicleItems = this.state.vehicles.map((vehicle, index) => {
+                const data = {
+                    vehicle_id: vehicle.vehicle_id,
+                    start_date: this.state.start_date,
+                    end_date: this.state.end_date,
+                    store_id: store.store_id,
+                }
+                return (<Vehicle data={data} key={index} history={this.props.history} />);
+            });
         }
 
         return (
@@ -109,7 +123,7 @@ class Store extends Component {
 						minDate={this.state.start_date || new Date()}
 					/>
                     <div className='clear' />
-                    {vehicleItems.length ? vehicleItems : ''}
+                    {vehicleItems ? vehicleItems : 'Please choose start and end date to show the available vehicles.'}
                     <div className='clear' />
 				</CardText>
             </Card>

@@ -73,11 +73,6 @@ class Vehicle extends Routable {
         console.log(result);
         }
 
-        if (result.length == 0) {
-            res.status(404);
-            res.send("Vehicle not found");
-            return;
-        }
         res.status(200);
         res.send(result);
         return;
