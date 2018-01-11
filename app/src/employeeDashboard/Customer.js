@@ -20,7 +20,6 @@ class Customer extends Component {
             end_date: null,
             reservations: null,
             rentals: null,
-            archivedRentals: null,
             license:{
                 license_number: '',
                 car: 0,
@@ -52,10 +51,6 @@ class Customer extends Component {
 
         axios.get('http://localhost:3001/rentals/?client_id=' + customerId).then(response => {
             this.setState({rentals: response.data});
-        });
-
-        axios.get('http://localhost:3001/rentals/?status=closed&client_id=' + customerId).then(response => {
-            this.setState({archivedRentals: response.data});
         });
     }
 
@@ -122,11 +117,6 @@ class Customer extends Component {
             rentalItems = this.state.rentals.map((item, index) => (<RentalItem key={index} rental={item} refreshData={this.loadData.bind(this)} employeeId={2} />));
         }
 
-        let archivedRentalItems = [];
-        if (this.state.archivedRentals) {
-            archivedRentalItems = this.state.archivedRentals.map((item, index) => (<RentalItem key={index} rental={item} refreshData={this.loadData.bind(this)} employeeId={2} />));
-        }
-
         let reservationItems = [];
         if (this.state.reservations) {
             reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} refreshData={this.loadData.bind(this)} employeeId={2} />));
@@ -190,19 +180,14 @@ class Customer extends Component {
                     'block', width: '100px'}}
                     onClick={this.handleLicenseSave}/>
 
-                    <Subheader style={{marginTop: '20px'}}>Active rentals</Subheader>
+                    <Subheader style={{marginTop: '20px'}}>Rentals</Subheader>
                     <Divider />
                     {rentalItems.length ? rentalItems : ''}
                     <div className='clear' />
 
-                    <Subheader style={{marginTop: '20px'}}>Active Reservations</Subheader>
+                    <Subheader style={{marginTop: '20px'}}>Reservations</Subheader>
                     <Divider />
                     {reservationItems.length ? reservationItems : ''}
-                    <div className='clear' />
-
-                    <Subheader style={{marginTop: '20px'}}>Archived Rentals</Subheader>
-                    <Divider />
-                    {archivedRentalItems.length ? archivedRentalItems : ''}
                     <div className='clear' />
 				</CardText>
             </Card>
