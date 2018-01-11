@@ -10,8 +10,9 @@ class ReservationDialog extends Component {
 
         this.state = {
             company: false,
-            company_name: '',
+            name: '',
             trn: '',
+            phone: '',
             street_name: '',
             street_number: '',
             postal_code: '',
@@ -33,15 +34,20 @@ class ReservationDialog extends Component {
 
     handleSubmit = () => {
         const data = {
-            company: this.state.company,
-            company_name: this.state.company_name,
+            is_company: +this.state.company,
+            name: this.state.name,
             trn: this.state.trn,
+            phone: this.state.phone,
             street_name: this.state.street_name,
             street_number: this.state.street_number,
             postal_code: this.state.postal_code,
             city: this.state.city,
             country: this.state.country,
         }
+        if (!this.state.company) {
+            delete data.trn;
+        }
+
         this.props.onSubmit(data);
     }
 
@@ -59,8 +65,9 @@ class ReservationDialog extends Component {
 		];
 
         const fields = [
-            {name: 'company_name', label: 'Company Name'},
+            {name: 'name', label: this.state.company ? 'Company Name' : 'Full Name'},
             {name: 'trn', label: 'TRN'},
+            {name: 'phone', label: 'Phone Number'},
             {name: 'street_name', label: 'Street Name'},
             {name: 'street_number', label: 'Street Number'},
             {name: 'postal_code', label: 'Postal Code'},
@@ -70,8 +77,7 @@ class ReservationDialog extends Component {
 
         let inputElements = fields.map((item, index) => {
             let disabled = false;
-            if (!this.state.company && (
-                ['company_name', 'trn'].indexOf(item.name) > -1)) {
+            if (!this.state.company && item.name == 'trn') {
                 disabled = true;
             }
 
@@ -79,7 +85,7 @@ class ReservationDialog extends Component {
                 key={index} name={item.name}
                 onChange={this.handleInputChange}
                 value={this.state[item.name]}
-                fullWidth
+                style={{width: '45%', marginRight: '20px'}}
                 disabled={disabled}
                 floatingLabelText={item.label}
                 floatingLabelFixed={true}
@@ -87,12 +93,9 @@ class ReservationDialog extends Component {
         });
 
         let bookingMessage;
-        if (this.props.bookingStatus !== 'idle') {
+        if (this.props.bookingStatus === 'success') {
             actions = null;
-
-            if (this.props.bookingStatus === 'success') {
-                bookingMessage = (<h3>Your booking is complete! Redirecting..</h3>);
-            }
+            bookingMessage = (<h3>Your booking is complete! Redirecting..</h3>);
         }
 
         return (
@@ -103,6 +106,9 @@ class ReservationDialog extends Component {
                 open={this.props.open}
                 onRequestClose={this.props.handleDialogClose}
             >
+                {this.props.bookingStatus == 'error' ? (
+                    <span style={{color: '#900', display: 'block'}}>There was an error saving the reservation. Try again.</span>
+                ) : ''}
                 {this.props.bookingStatus !== 'success' ? (
                 <div>
                     <Checkbox

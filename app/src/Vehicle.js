@@ -36,19 +36,32 @@ class Vehicle extends Component {
         this.setState({dialogOpen: true});
     }
 
-    handleSubmit = (data) => {
+    handleSubmit = (billingData) => {
         this.setState({bookingStatus: 'pending'});
-        const amount = this.getTotalAmount();
+        axios.post('http://localhost:3001/billings', billingData)
+            .then(response => {
+                const billingId = response.data.resource_id;
 
-        const postData = this.state.reservationDetails;
-        postData.amount = amount;
+                return billingId;
+            })
+            .then(billingId => {
+                const amount = this.getTotalAmount();
 
-        axios.post('http://localhost:3001/reservations', postData)
+                const postData = this.state.reservationDetails;
+                postData.amount = amount;
+                postData.bd_id = billingId;
+
+                return axios.post('http://localhost:3001/reservations', postData)
+            })
             .then(response => {
                 if (response.data.resource_id) {
                     this.setState({bookingStatus: 'success'});
                     setTimeout(this.props.history.push.bind(this, '/home'), 3000);
                 }
+            })
+            .catch(e => {
+                console.log(e);
+                this.setState({bookingStatus: 'error'});
             });
     }
 
