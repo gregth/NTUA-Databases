@@ -88,7 +88,7 @@ const connection = mysql.createConnection({
         let substitutions = [];
         if (conditions && Object.keys(conditions).length != 0){
             let [conditionPlaceholders, conditionValues] = objectToQueryFields(conditions);
-            query += ` WHERE ` + conditionPlaceholders.join(" AND ");
+            query += ` WHERE ` + conditionPlaceholders.join(" AND ") + ` LIMIT 1`;
             substitutions.push(...conditionValues);    
         }
 
