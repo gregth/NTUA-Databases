@@ -5,6 +5,7 @@ import {List, ListItem} from 'material-ui/List';
 import axios from 'axios';
 import moment from 'moment';
 import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
 
 class Vehicle extends Component {
     constructor(props) {
@@ -14,9 +15,16 @@ class Vehicle extends Component {
         this.state = {
             vehicle_id: data.vehicle_id,
             details: data.vehicle,
+            atOwnerStore: data.vehicle.store_id == data.vehicle.last_seen_at,
 			dialogOpen: false,
             bookingStatus: 'idle',
         };
+    }
+
+    updateLastSeenCheck(event, value) {
+        const state = this.state;
+        state.atOwnerStore = value;
+        this.setState(state);
     }
 
     handleInputChange = (event, value) => {
@@ -35,11 +43,27 @@ class Vehicle extends Component {
         data.buy_date = moment(data.buy_date).format("YYYY-MM-DD HH:mm:ss")
         data.kilometers = +data.kilometers;
 
+        if (this.state.atOwnerStore) {
+            data.last_seen_at = data.store_id;
+        }
+
         axios.put('http://localhost:3001/vehicles/' + this.state.vehicle_id, data)
             .then(res => {
                 if (res.data.affectedRows) {
                     alert('Vehicle updated successfully.');
                 }
+            }).catch(e => {
+                alert(e);
+            });
+    }
+
+    handleRemove = () => {
+        axios.delete('http://localhost:3001/vehicles/' + this.state.vehicle_id)
+            .then(res => {
+                alert('Vehicle deleted successfully.');
+                this.props.refreshData();
+            }).catch(e => {
+                alert(e);
             });
     }
 
@@ -81,10 +105,20 @@ class Vehicle extends Component {
 				<CardText style={{paddingTop: 0}}>
 					<List>
                         {vehicleDetails}
+                        <Checkbox
+                            label='Is at owner store'
+                            checked={this.state.atOwnerStore}
+                            onCheck={this.updateLastSeenCheck.bind(this)}
+                        />
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton onClick={this.handleSubmit} label='Update' fullWidth={true} />
+                    <RaisedButton onClick={this.handleSubmit} label='Update'
+                    fullWidth={true} />
+                    <RaisedButton backgroundColor='#900'
+                    style={{marginTop: '10px'}}
+                    labelColor='#fff' label='Remove' fullWidth
+                    onClick={this.handleRemove} />
 				</CardActions>
             </Card>
         );

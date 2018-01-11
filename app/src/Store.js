@@ -18,6 +18,8 @@ class Store extends Component {
             start_date: null,
             end_date: null,
             vehicles: null,
+            phones: [],
+            emails: [],
         };
     }
 
@@ -26,6 +28,20 @@ class Store extends Component {
 
         axios.get('http://localhost:3001/stores/' + storeId).then(response => {
             this.setState({details: response.data, dataReady: true});
+        });
+
+        axios.get('http://localhost:3001/contacts/?store_id=' + storeId).then(response => {
+            const phones = [];
+            const emails = [];
+            response.data.forEach(item => {
+                if (item.type == 'telephone') {
+                    phones.push(item.value);
+                } else if (item.type == 'email') {
+                    emails.push(item.value);
+                }
+            })
+
+            this.setState({emails, phones});
         });
     }
 
@@ -58,8 +74,6 @@ class Store extends Component {
 
         const store = this.state.details;
         let store_address = `${store.street_name} ${store.street_number}, ${store.postal_code} ${store.city}, ${store.country}`;
-        let store_phone = '6983317150';
-        let store_email = 'Kaisariani@rental.com';
 
         let vehicleItems = null;
         if (this.state.vehicles) {
@@ -97,15 +111,15 @@ class Store extends Component {
 
                             <ListItem
                                 disabled={true}
-                                primaryText='Telephone'
+                                primaryText='Telephones'
                                 style={{padding: '8px 0'}}
-                                secondaryText={store_phone}/>
+                                secondaryText={this.state.phones.join(', ')}/>
 
                             <ListItem
                                 disabled={true}
-                                primaryText='Email'
+                                primaryText='Emails'
                                 style={{padding: '8px 0'}}
-                                secondaryText={store_email}/>
+                                secondaryText={this.state.emails.join(', ')}/>
                         </List>
                         <div className='clear' />
                     </div>

@@ -37,7 +37,10 @@ class EmployeeHome extends Component {
 
     handleInputChange = (event, value) => {
         event.persist();
-        this.setState(state => state.customer_search[event.target.name] = value);
+        const state = this.state;
+        state.customer_search[event.target.name] = value;
+
+        this.setState(state);
     }
 
     handleCustomerSearch = () => {
@@ -57,7 +60,7 @@ class EmployeeHome extends Component {
     render() {
         let storeItems = [];
         if (this.state.stores) {
-            storeItems = this.state.stores.map((item, index) => (<StoreItem key={index} store={item} rootPath='/employeeDashboard/' label='View Store' />));
+            storeItems = this.state.stores.map((item, index) => (<StoreItem key={index} store={item} rootPath='/employee/' label='View Store' />));
         }
 
         let customerItems = [];
