@@ -44,8 +44,18 @@ class Statistics extends Routable {
             }
             res.status(200);
             res.send(result);
-        }
-        else {
+        } else if (req.params.type == 'vehicles_service') {
+            let query = `SELECT * from upcoming_services`;
+            try {
+                [result] = await this.db.execute(query);
+                res.status(200);
+                res.send(result);
+            } catch(e) {
+                res.status(500);
+                console.log(e);
+                res.send(e);
+            }
+        } else {
             res.status(400);
             res.send("Not found");
         }
