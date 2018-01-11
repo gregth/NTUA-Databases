@@ -29,6 +29,19 @@ class EmployeeHome extends Component {
     loadData() {
         axios.get('http://localhost:3001/stores').then(response => {
             this.setState({stores: response.data});
+
+            axios.get('http://localhost:3001/statistics/count_vehicles').then(response => {
+                const state = this.state;
+                response.data.forEach(storeInfo => {
+                    state.stores.forEach(store => {
+                        if (store.store_id == storeInfo.store_id) {
+                            store.vehicle_count = storeInfo.count;
+                        }
+                    });
+
+                    this.setState(state);
+                });
+            });
         });
 
         axios.get('http://localhost:3001/statistics/good_clients')

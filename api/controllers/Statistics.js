@@ -8,7 +8,7 @@ class Statistics extends Routable {
     async get(req, res) {
         let result;
         if (req.params.type == 'count_vehicles') {
-            let query = `SELECT s.store_name, s.store_id, COUNT(vehicle_id) FROM
+            let query = `SELECT s.store_name, s.store_id, COUNT(vehicle_id) as count FROM
                 stores AS s, vehicles AS v WHERE v.store_id = s.store_id
                 GROUP BY s.store_id`;
             console.log("QUERY: " + query);

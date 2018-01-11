@@ -26,6 +26,12 @@ class StoreItem extends Component {
                             secondaryText={store_address}>
                             <a className='list-right' target='_blank' href={'https://www.google.gr/maps/search/' + encodeURIComponent(store_address)}>Map</a>
                         </ListItem>
+
+						{store.vehicle_count ? (<ListItem
+                            disabled={true}
+                            primaryText='Vehicles count'
+                            style={{padding: '8px 0'}}
+                            secondaryText={store.vehicle_count} />) : ''}
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
