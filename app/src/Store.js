@@ -85,7 +85,7 @@ class Store extends Component {
                     end_date: this.state.end_date,
                     store_id: store.store_id,
                 }
-                return (<Vehicle data={data} key={index} history={this.props.history} />);
+                return (<Vehicle data={data} key={data.vehicle_id} history={this.props.history} />);
             });
         }
 

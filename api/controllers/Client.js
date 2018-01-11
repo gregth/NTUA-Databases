@@ -20,7 +20,7 @@ class Client extends Routable {
             },
             put: {
                 fields: ['license_id', 'identity_number', 'first_name', 'last_name',
-                    'street_name', 'street_number', 'postal_code', 'city', 'country'],
+                    'street_name', 'street_number', 'postal_code', 'city', 'country', 'email'],
             },
             delete: {
                 queryField: 'client_id',
