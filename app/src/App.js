@@ -6,6 +6,7 @@ import Home from './Home';
 import Store from './Store';
 import EmployeeRouter from './EmployeeRouter';
 import Customer from './employeeDashboard/Customer';
+import Login from './Login';
 
 class App extends Component {
 	handleTitleClick = () => {
@@ -19,6 +20,7 @@ class App extends Component {
                 <Route path='/home' component={Home} />
                 <Route path='/employee' component={EmployeeRouter} />
                 <Route path='/store/:storeId' component={Store} />
+                <Route path='/login/:userType' component={Login} />
             </div>
         );
     }
