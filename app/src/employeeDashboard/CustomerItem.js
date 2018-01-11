@@ -26,14 +26,15 @@ class CustomerItem extends Component {
             {name: 'country', label: 'Country'},
             {name: 'email', label: 'Email'},
             {name: 'identity_number', label: 'Identification Number'},
+            {name: 'avg_amount', label: 'Average amount $'},
         ];
         const customerDetails = fields.map((item, index) => (
-            <ListItem
+            customer[item.name] ? (<ListItem
                 key={index}
                 disabled={true}
                 primaryText={item.label}
                 style={{padding: '8px 0'}}
-                secondaryText={customer[item.name]}/>
+                secondaryText={customer[item.name]}/>) : ''
         ));
 
         return (

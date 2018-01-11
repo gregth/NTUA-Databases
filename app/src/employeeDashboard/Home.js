@@ -22,6 +22,7 @@ class EmployeeHome extends Component {
                 identity_number: '',
             },
             customers: [],
+            bestCustomers: [],
         };
     }
 
@@ -29,6 +30,11 @@ class EmployeeHome extends Component {
         axios.get('http://localhost:3001/stores').then(response => {
             this.setState({stores: response.data});
         });
+
+        axios.get('http://localhost:3001/statistics/good_clients')
+            .then(res => {
+                this.setState({bestCustomers: res.data});
+            });
     }
 
     componentWillMount() {
@@ -66,6 +72,11 @@ class EmployeeHome extends Component {
         let customerItems = [];
         if (this.state.customers.length) {
             customerItems = this.state.customers.map((item, index) => (<CustomerItem key={item.client_id} customer={item} refreshData={this.handleCustomerSearch} />));
+        }
+
+        let bestCustomerItems = [];
+        if (this.state.bestCustomers.length) {
+            bestCustomerItems = this.state.bestCustomers.map((item, index) => (<CustomerItem key={item.client_id} customer={item} refreshData={this.handleCustomerSearch} />));
         }
 
         const fields = [
@@ -106,6 +117,11 @@ class EmployeeHome extends Component {
                             <Subheader>Stores</Subheader>
                             <Divider />
                             {storeItems.length ? storeItems : ''}
+                            <div className='clear' />
+
+                            <Subheader>Best clients</Subheader>
+                            <Divider />
+                            {bestCustomerItems.length ? bestCustomerItems : ''}
                             <div className='clear' />
                         </div>
                     </CardMedia>

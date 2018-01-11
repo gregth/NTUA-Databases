@@ -29,7 +29,7 @@ class Statistics extends Routable {
                 value.push(50);
             }
 
-            let query = `SELECT c.first_name, c.last_name, AVG(r.amount) 
+            let query = `SELECT c.*, AVG(r.amount) as avg_amount 
                 FROM reservations AS r 
                 JOIN clients AS c ON c.client_id = r.client_id
                 GROUP BY c.client_id
