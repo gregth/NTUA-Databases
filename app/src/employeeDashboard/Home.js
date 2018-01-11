@@ -37,7 +37,10 @@ class EmployeeHome extends Component {
 
     handleInputChange = (event, value) => {
         event.persist();
-        this.setState(state => state.customer_search[event.target.name] = value);
+        const state = this.state;
+        state.customer_search[event.target.name] = value;
+
+        this.setState(state);
     }
 
     handleCustomerSearch = () => {

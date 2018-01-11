@@ -71,11 +71,13 @@ class Customer extends Component {
 
     handleInputChange = (event, value) => {
         event.persist();
+        const state = this.state;
         if (event.target.name == 'license_number') {
-            this.setState(state => state.license[event.target.name] = value);
+            state.license[event.target.name] = value;
         } else {
-            this.setState(state => state.details[event.target.name] = value);
+            state.details[event.target.name] = value;
         }
+        this.setState(state);
     }
 
     handleCustomerSave = () => {

@@ -29,7 +29,10 @@ class ReservationDialog extends Component {
 
     handleInputChange = (event, value) => {
         event.persist();
-        this.setState(state => state[event.target.name] = value);
+        const state = this.state;
+        state[event.target.name] = value;
+
+        this.setState(state);
     }
 
     handleSubmit = () => {
