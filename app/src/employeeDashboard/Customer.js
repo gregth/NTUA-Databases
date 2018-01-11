@@ -20,6 +20,7 @@ class Customer extends Component {
             end_date: null,
             reservations: null,
             rentals: null,
+            employeeId: localStorage.getItem('employeeId'),
             license:{
                 license_number: '',
                 car: 0,
@@ -114,12 +115,12 @@ class Customer extends Component {
 
         let rentalItems = [];
         if (this.state.rentals) {
-            rentalItems = this.state.rentals.map((item, index) => (<RentalItem key={index} rental={item} refreshData={this.loadData.bind(this)} employeeId={2} />));
+            rentalItems = this.state.rentals.map((item, index) => (<RentalItem key={index} rental={item} refreshData={this.loadData.bind(this)} employeeId={this.state.employeeId} />));
         }
 
         let reservationItems = [];
         if (this.state.reservations) {
-            reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} refreshData={this.loadData.bind(this)} employeeId={2} />));
+            reservationItems = this.state.reservations.map((item, index) => (<ReservationItem key={index} reservation={item} refreshData={this.loadData.bind(this)} employeeId={this.state.employeeId} />));
         }
 
         const fields = [
