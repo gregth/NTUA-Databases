@@ -12,7 +12,7 @@ class Rental extends Routable {
                 table_alias: 'r',
                 allowed_search_keys: ['client_id'],
                 keys_lookup_table: {client_id: 'rv'},
-                fields:  ['receiver_employee_id', 'deliverer_employee_id', 'r.reservation_id',
+                fields:  ['rental_id', 'receiver_employee_id', 'deliverer_employee_id', 'r.reservation_id',
                     'r.start_date', 'r.end_date', 'damage_score', 'rv.start_date as reservation_start_date',
                     'rv.end_date as reservation_end_date', 'rv.vehicle_id', 'rv.client_id', 'rv.amount', 'rv.store_id'],
                 orderBy: [order_field('r.start_date', 'ASC')],
