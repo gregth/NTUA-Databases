@@ -30,7 +30,6 @@ class Vehicle extends Routable {
         if (!req.params.vehicleId) {
             var required_search_keys = ["start_date", "end_date", "store_id", "brand", "model", "type"];
             filters = this.filter_keys(req.query, required_search_keys);
-            console.log(filters);
             if (!filters.start_date ||
                 !filters.end_date ||
                 !filters.store_id
@@ -70,7 +69,6 @@ class Vehicle extends Routable {
         }
         else {
             [result] = await this.db.select('vehicles', [], {vehicle_id: req.params.vehicleId}, []);
-        console.log(result);
         }
 
         if (result.length == 0) {
