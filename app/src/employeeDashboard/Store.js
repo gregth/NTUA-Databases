@@ -4,21 +4,47 @@ import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Vehicle from './Vehicle';
+import AddVehicleDialog from './AddVehicleDialog';
 import axios from 'axios';
 import moment from 'moment';
 import DatePicker from 'material-ui/DatePicker';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class Store extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+			dialogOpen: false,
             dataReady: false,
             details: null,
             start_date: null,
             end_date: null,
             vehicles: null,
         };
+    }
+
+    handleDialogClose = () => {
+        this.setState({dialogOpen: false});
+    }
+
+    handleDialogOpen = () => {
+        this.setState({dialogOpen: true});
+    }
+
+    handleNewVehicle = (data) => {
+        data.last_seen_at = +this.props.match.params.storeId;
+        data.store_id = +this.props.match.params.storeId;
+        axios.post('http://localhost:3001/vehicles', data)
+            .then(res => {
+                alert('Vehicle added successfully');
+                this.handleDialogClose();
+                this.loadData();
+            })
+            .catch(e => {
+                alert(e);
+                console.log(e);
+            });
     }
 
     loadData = () => {
@@ -102,10 +128,17 @@ class Store extends Component {
 
                     <Subheader style={{marginTop: '20px'}}>Vehicles</Subheader>
                     <Divider />
+					<RaisedButton onClick={this.handleDialogOpen} label='Add' />
                     <div className='clear' />
                     {vehicleItems ? vehicleItems : 'Please choose start and end date to show the available vehicles.'}
                     <div className='clear' />
 				</CardText>
+
+                <AddVehicleDialog open={this.state.dialogOpen}
+                handleDialogClose={this.handleDialogClose}
+                handleDialogOpen={this.handleDialogOpen}
+                refreshData={this.props.refreshData}
+                onSubmit={this.handleNewVehicle} />
             </Card>
         );
     }
