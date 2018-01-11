@@ -40,6 +40,18 @@ class Vehicle extends Component {
                 if (res.data.affectedRows) {
                     alert('Vehicle updated successfully.');
                 }
+            }).catch(e => {
+                alert(e);
+            });
+    }
+
+    handleRemove = () => {
+        axios.delete('http://localhost:3001/vehicles/' + this.state.vehicle_id)
+            .then(res => {
+                alert('Vehicle deleted successfully.');
+                this.props.refreshData();
+            }).catch(e => {
+                alert(e);
             });
     }
 
@@ -84,7 +96,12 @@ class Vehicle extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton onClick={this.handleSubmit} label='Update' fullWidth={true} />
+                    <RaisedButton onClick={this.handleSubmit} label='Update'
+                    fullWidth={true} />
+                    <RaisedButton backgroundColor='#900'
+                    style={{marginTop: '10px'}}
+                    labelColor='#fff' label='Remove' fullWidth
+                    onClick={this.handleRemove} />
 				</CardActions>
             </Card>
         );

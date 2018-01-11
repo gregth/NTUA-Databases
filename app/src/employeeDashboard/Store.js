@@ -21,7 +21,7 @@ class Store extends Component {
         };
     }
 
-    componentWillMount() {
+    loadData = () => {
         const {storeId} = this.props.match.params;
 
         axios.get('http://localhost:3001/stores/' + storeId).then(response => {
@@ -35,6 +35,10 @@ class Store extends Component {
             .then(res => {
                 this.setState({vehicles: res.data});
             });
+    }
+
+    componentWillMount() {
+        this.loadData();
     }
 
     render() {
@@ -57,7 +61,7 @@ class Store extends Component {
                     end_date: this.state.end_date,
                     store_id: store.store_id,
                 }
-                return (<Vehicle data={data} key={index} history={this.props.history} />);
+                return (<Vehicle data={data} key={index} refreshData={this.loadData} />);
             });
         }
 
