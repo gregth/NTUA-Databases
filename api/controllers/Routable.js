@@ -29,7 +29,6 @@ class Routable {
         let joins = methodOptions.joins; 
         let table = this.options.table;
         let keys_lookup_table = methodOptions.keys_lookup_table;
-        console.log(methodOptions);
         if (methodOptions.table_alias) {
             table += ` AS ${methodOptions.table_alias}`;
         }
@@ -57,7 +56,6 @@ class Routable {
             }
         }
 
-        console.log(result);
         res.send(result);
     }
 
@@ -102,7 +100,6 @@ class Routable {
         try {
             let condition = {};
             condition[optionalField.field_name] = req.params[optionalField.query];
-            console.log(condition);
             let [result] = await this.db.update(this.options.table, params, condition);
             res.status(200);
             if (result.affectedRows != 1) {
@@ -135,7 +132,6 @@ class Routable {
 
         try {
             let [result] = await this.db.delete(this.options.table, param);
-            console.log(result);
             if (result.affectedRows != 1) {
                 res.status(500);
                 res.send("Error");
