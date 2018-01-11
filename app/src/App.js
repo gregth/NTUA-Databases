@@ -8,12 +8,16 @@ import EmployeeRouter from './EmployeeRouter';
 import Customer from './employeeDashboard/Customer';
 
 class App extends Component {
+	handleTitleClick = () => {
+        this.props.history.push('/home');
+    }
+
     render() {
         return (
             <div className='App'>
                 <Route path='/register' component={Register} />
                 <Route path='/home' component={Home} />
-                <Route path='/employeehome' component={EmployeeRouter} />
+                <Route path='/employee' component={EmployeeRouter} />
                 <Route path='/store/:storeId' component={Store} />
             </div>
         );

@@ -60,7 +60,7 @@ class EmployeeHome extends Component {
     render() {
         let storeItems = [];
         if (this.state.stores) {
-            storeItems = this.state.stores.map((item, index) => (<StoreItem key={index} store={item} rootPath='/employeeDashboard/' label='View Store' />));
+            storeItems = this.state.stores.map((item, index) => (<StoreItem key={index} store={item} rootPath='/employee/' label='View Store' />));
         }
 
         let customerItems = [];
