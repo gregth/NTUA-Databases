@@ -41,7 +41,7 @@ const bodyParser = require('body-parser');
     new Rental(app.route('/rentals/:rentalId?'))
     new Contact(app.route('/contacts/:storeId?'))
     new Billing(app.route('/billings/:billingId?'))
-    new Statistics(app.route('/statistics/:type?'))
+    new Statistics(app.route('/statistics/:type?/:value?'))
 	
     app.route('/stores/:storeId/vehicles/')
         .get((req, res) => {
