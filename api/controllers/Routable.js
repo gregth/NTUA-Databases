@@ -127,6 +127,7 @@ class Routable {
             }
             res.status(200);
             res.send(result);
+            console.log(result);
             return;
         } catch(e) {
             console.log(e);
