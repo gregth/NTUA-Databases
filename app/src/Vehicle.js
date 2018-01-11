@@ -52,7 +52,7 @@ class Vehicle extends Component {
 
         axios.post('http://localhost:3001/reservations', postData)
             .then(response => {
-                if (response.data.reservation_number) {
+                if (response.data.resource_id) {
                     this.setState({bookingStatus: 'success'});
                     setTimeout(this.props.history.push.bind(this, '/home'), 3000);
                 }

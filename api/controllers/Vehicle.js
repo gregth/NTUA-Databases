@@ -11,7 +11,7 @@ class Vehicle extends Routable {
             post: {
                 fields: ["last_seen_at", "store_id", "type",
                     "brand", "model", "cc", "horse_power", "plate_number", "buy_date",
-                    "kilometers", "last_service", "next_service", "insurance_expiration"],
+                    "kilometers", "last_service", "next_service", "insurance_expiration", "price"],
             },
             put: {
                 fields: ["last_seen_at", "store_id", "type",

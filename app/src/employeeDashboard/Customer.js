@@ -6,6 +6,7 @@ import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import ReservationItem from '../ReservationItem';
+import RentalItem from './RentalItem';
 import axios from 'axios';
 
 class Customer extends Component {
@@ -109,7 +110,10 @@ class Customer extends Component {
             return 'Loading..';
         }
 
-        console.log(this.state.rentals);
+        let rentalItems = [];
+        if (this.state.rentals) {
+            rentalItems = this.state.rentals.map((item, index) => (<RentalItem key={index} rental={item} refreshData={this.loadData.bind(this)} employeeId={2} />));
+        }
 
         let reservationItems = [];
         if (this.state.reservations) {
@@ -176,6 +180,8 @@ class Customer extends Component {
 
                     <Subheader style={{marginTop: '20px'}}>Active rentals</Subheader>
                     <Divider />
+                    {rentalItems.length ? rentalItems : ''}
+                    <div className='clear' />
 
                     <Subheader style={{marginTop: '20px'}}>Reservations</Subheader>
                     <Divider />
