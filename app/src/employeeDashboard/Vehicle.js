@@ -5,6 +5,7 @@ import {List, ListItem} from 'material-ui/List';
 import axios from 'axios';
 import moment from 'moment';
 import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
 
 class Vehicle extends Component {
     constructor(props) {
@@ -14,9 +15,16 @@ class Vehicle extends Component {
         this.state = {
             vehicle_id: data.vehicle_id,
             details: data.vehicle,
+            atOwnerStore: data.vehicle.store_id == data.vehicle.last_seen_at,
 			dialogOpen: false,
             bookingStatus: 'idle',
         };
+    }
+
+    updateLastSeenCheck(event, value) {
+        const state = this.state;
+        state.atOwnerStore = value;
+        this.setState(state);
     }
 
     handleInputChange = (event, value) => {
@@ -34,6 +42,10 @@ class Vehicle extends Component {
         data.insurance_expiration = moment(data.insurance_expiration).format("YYYY-MM-DD HH:mm:ss")
         data.buy_date = moment(data.buy_date).format("YYYY-MM-DD HH:mm:ss")
         data.kilometers = +data.kilometers;
+
+        if (this.state.atOwnerStore) {
+            data.last_seen_at = data.store_id;
+        }
 
         axios.put('http://localhost:3001/vehicles/' + this.state.vehicle_id, data)
             .then(res => {
@@ -93,6 +105,11 @@ class Vehicle extends Component {
 				<CardText style={{paddingTop: 0}}>
 					<List>
                         {vehicleDetails}
+                        <Checkbox
+                            label='Is at owner store'
+                            checked={this.state.atOwnerStore}
+                            onCheck={this.updateLastSeenCheck.bind(this)}
+                        />
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
