@@ -28,13 +28,13 @@ class Register extends Component {
 
     handleRegister = () => {
         axios.post('http://localhost:3001/clients', qs.stringify(this.state))
-            .then(data => {
-                console.log('success');
-                console.log(data);
+            .then(res => {
+                console.log(res.data);
+                localStorage.setItem('clientId', res.data.resource_id);
+                this.props.history.push('/home');
             })
             .catch(err => {
-                console.log('error');
-                console.log(err);
+                alert(err);
             });
     }
 
@@ -92,6 +92,7 @@ class Register extends Component {
                     onChange={this.handleInputChange}
                     value={this.state[item.name]}
                     fullWidth
+                    type={item.name == 'password' ? 'password' : 'text'}
                     floatingLabelText={item.label}
                     floatingLabelFixed={true}
                 />);

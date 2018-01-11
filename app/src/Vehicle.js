@@ -21,7 +21,7 @@ class Vehicle extends Component {
                 end_date: moment(data.end_date).startOf('day').format("YYYY-MM-DD HH:mm:ss"),
                 vehicle_id: data.vehicle_id,
                 store_id: data.store_id,
-                client_id: 11,
+                client_id: localStorage.getItem('clientId'),
                 has_paid: 0,
 				company: false,
             },

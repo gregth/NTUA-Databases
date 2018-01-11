@@ -65,7 +65,7 @@ class EmployeeHome extends Component {
 
         let customerItems = [];
         if (this.state.customers.length) {
-            customerItems = this.state.customers.map((item, index) => (<CustomerItem key={index} customer={item} refreshData={this.handleCustomerSearch} />));
+            customerItems = this.state.customers.map((item, index) => (<CustomerItem key={item.client_id} customer={item} refreshData={this.handleCustomerSearch} />));
         }
 
         const fields = [

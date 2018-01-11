@@ -14,6 +14,7 @@ class Home extends Component {
         this.state = {
             stores: null,
             reservations: null,
+            clientId: localStorage.getItem('clientId'),
         };
     }
 
@@ -22,7 +23,7 @@ class Home extends Component {
             this.setState({stores: response.data});
         });
 
-        axios.get('http://localhost:3001/reservations/?client_id=11').then(response => {
+        axios.get('http://localhost:3001/reservations/?client_id=' + this.state.clientId).then(response => {
             const reservations = response.data;
             reservations.forEach(item => {
                 item.start_date = moment(item.start_date).format("YYYY-MM-DD HH:mm:ss");
