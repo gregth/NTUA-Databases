@@ -66,6 +66,7 @@ class Store extends Component {
             vehicleItems = this.state.vehicles.map((vehicle, index) => {
                 const data = {
                     vehicle_id: vehicle.vehicle_id,
+                    vehicle,
                     start_date: this.state.start_date,
                     end_date: this.state.end_date,
                     store_id: store.store_id,

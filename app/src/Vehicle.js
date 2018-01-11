@@ -13,8 +13,7 @@ class Vehicle extends Component {
         const {data} = props;
         this.state = {
             vehicle_id: data.vehicle_id,
-            dataReady: false,
-            details: null,
+            details: data.vehicle,
 			dialogOpen: false,
             bookingStatus: 'idle',
             reservationDetails: {
@@ -27,12 +26,6 @@ class Vehicle extends Component {
 				company: false,
             },
         };
-    }
-
-    componentWillMount() {
-        axios.get('http://localhost:3001/vehicles/' + this.state.vehicle_id).then(response => {
-            this.setState({details: response.data[0], dataReady: true});
-        });
     }
 
     handleDialogClose = () => {
@@ -80,10 +73,6 @@ class Vehicle extends Component {
     }
 
     render() {
-        if (!this.state.dataReady) {
-            return 'Loading..';
-        }
-
         const vehicle = this.state.details;
         const amount = this.getTotalAmount();
 
