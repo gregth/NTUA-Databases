@@ -13,8 +13,7 @@ class Vehicle extends Component {
         const {data} = props;
         this.state = {
             vehicle_id: data.vehicle_id,
-            dataReady: false,
-            details: null,
+            details: data.vehicle,
 			dialogOpen: false,
             bookingStatus: 'idle',
             reservationDetails: {
@@ -29,12 +28,6 @@ class Vehicle extends Component {
         };
     }
 
-    componentWillMount() {
-        axios.get('http://localhost:3001/vehicles/' + this.state.vehicle_id).then(response => {
-            this.setState({details: response.data[0], dataReady: true});
-        });
-    }
-
     handleDialogClose = () => {
         this.setState({dialogOpen: false});
     }
@@ -43,19 +36,32 @@ class Vehicle extends Component {
         this.setState({dialogOpen: true});
     }
 
-    handleSubmit = (data) => {
+    handleSubmit = (billingData) => {
         this.setState({bookingStatus: 'pending'});
-        const amount = this.getTotalAmount();
+        axios.post('http://localhost:3001/billings', billingData)
+            .then(response => {
+                const billingId = response.data.resource_id;
 
-        const postData = this.state.reservationDetails;
-        postData.amount = amount;
+                return billingId;
+            })
+            .then(billingId => {
+                const amount = this.getTotalAmount();
 
-        axios.post('http://localhost:3001/reservations', postData)
+                const postData = this.state.reservationDetails;
+                postData.amount = amount;
+                postData.bd_id = billingId;
+
+                return axios.post('http://localhost:3001/reservations', postData)
+            })
             .then(response => {
                 if (response.data.resource_id) {
                     this.setState({bookingStatus: 'success'});
                     setTimeout(this.props.history.push.bind(this, '/home'), 3000);
                 }
+            })
+            .catch(e => {
+                console.log(e);
+                this.setState({bookingStatus: 'error'});
             });
     }
 
@@ -80,10 +86,6 @@ class Vehicle extends Component {
     }
 
     render() {
-        if (!this.state.dataReady) {
-            return 'Loading..';
-        }
-
         const vehicle = this.state.details;
         const amount = this.getTotalAmount();
 

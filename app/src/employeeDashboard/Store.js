@@ -27,28 +27,14 @@ class Store extends Component {
         axios.get('http://localhost:3001/stores/' + storeId).then(response => {
             this.setState({details: response.data, dataReady: true});
         });
-    }
 
-    searchVehicles(state) {
-        const params = {
-            start_date: moment(state.start_date).format('YYYY-MM-DD HH:mm:ss'),
-            end_date: moment(state.end_date).format('YYYY-MM-DD HH:mm:ss'),
-            store_id: this.props.match.params.storeId,
-        }
-        axios.get('http://localhost:3001/vehicles', {params})
+        const vehicleParams = {
+            store_id: this.props.match.params.storeId
+        };
+        axios.get('http://localhost:3001/vehicles', {params: vehicleParams})
             .then(res => {
                 this.setState({vehicles: res.data});
             });
-    }
-
-    handleDateChange(type, event, date) {
-        const state = this.state;
-        state[type] = date;
-        this.setState(state);
-
-        if (this.state.start_date && this.state.end_date) {
-            this.searchVehicles(state);
-        }
     }
 
     render() {
@@ -112,17 +98,6 @@ class Store extends Component {
 
                     <Subheader style={{marginTop: '20px'}}>Vehicles</Subheader>
                     <Divider />
-					<DatePicker
-						floatingLabelText='Start Date'
-						minDate={new Date()}
-                        style={{float: 'left', marginRight: '20px'}}
-                        onChange={this.handleDateChange.bind(this, 'start_date')}
-					/>
-					<DatePicker
-						floatingLabelText='End Date'
-                        onChange={this.handleDateChange.bind(this, 'end_date')}
-						minDate={this.state.start_date || new Date()}
-					/>
                     <div className='clear' />
                     {vehicleItems ? vehicleItems : 'Please choose start and end date to show the available vehicles.'}
                     <div className='clear' />

@@ -71,11 +71,6 @@ class Vehicle extends Routable {
             [result] = await this.db.select('vehicles', [], {vehicle_id: req.params.vehicleId}, []);
         }
 
-        if (result.length == 0) {
-            res.status(404);
-            res.send("Vehicle not found");
-            return;
-        }
         res.status(200);
         res.send(result);
         return;
