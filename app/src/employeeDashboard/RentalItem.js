@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
-import EditReservationDialog from '../EditReservationDialog';
+import EndRentalDialog from './EndRentalDialog';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -18,21 +18,18 @@ class RentalItem extends Component {
         }
     }
 
-    handleNewRental = () => {
+    handleRentalEnd = (damage_score) => {
         const rentalData = {
-            start_date: moment().format("YYYY-MM-DD HH:mm:ss"),
-            reservation_id: this.state.reservation.reservation_id,
-            deliverer_employee_id: this.props.employeeId,
-        };
-        axios.post('http://localhost:3001/rentals/', rentalData)
+            receiver_employee_id: this.props.employeeId,
+            end_date: moment().format("YYYY-MM-DD HH:mm:ss"),
+            damage_score,
+        }
+        axios.put('http://localhost:3001/rentals/' + this.props.rental.rental_id, rentalData)
             .then(res => {
                 console.log(res);
-                //this.props.refreshData();
+                this.handleDialogClose();
+                this.props.refreshData();
             });
-    }
-
-    handleEditSubmit = () => {
-        console.log(this.state.reservation);
     }
 
     handleDialogClose = () => {
@@ -73,8 +70,6 @@ class RentalItem extends Component {
         const {store, vehicle} = this.state;
         const reservation_dates = `${moment(rental.reservation_start_date).format('ll')} - ${moment(rental.reservation_end_date).format('ll')}`;
         const rental_start_date = moment(rental.start_date).format('ll')
-
-        const store_address = `${store.street_name} ${store.street_number}, ${store.postal_code} ${store.city}, ${store.country}`;
         const vehicle_name = `${vehicle.brand} ${vehicle.model}`;
 
         return (
@@ -115,8 +110,14 @@ class RentalItem extends Component {
 				<CardActions style={{textAlign: 'center'}}>
                     <RaisedButton
                     backgroundColor='#900' labelColor='#fff' label='End rental'
-                    onClick={this.handleCancel} />
+                    onClick={this.handleDialogOpen} />
 				</CardActions>
+
+                <EndRentalDialog open={this.state.dialogOpen}
+                handleDialogClose={this.handleDialogClose}
+                handleDialogOpen={this.handleDialogOpen}
+                refreshData={this.props.refreshData}
+                onSubmit={this.handleRentalEnd} />
             </Card>
         );
     }

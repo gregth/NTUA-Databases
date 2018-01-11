@@ -37,8 +37,7 @@ class ReservationItem extends Component {
         };
         axios.post('http://localhost:3001/rentals/', rentalData)
             .then(res => {
-                console.log(res);
-                //this.props.refreshData();
+                this.props.refreshData();
             });
     }
 
@@ -124,8 +123,9 @@ class ReservationItem extends Component {
                     onClick={this.handleCancel} />
                     {this.props.employeeId ? (
                         <RaisedButton backgroundColor='#080' labelColor='#fff'
-                        label='Start' onClick={this.handleNewRental}
-                        style={{marginTop: '8px'}}/>
+                        label='Start Rental' fullWidth
+                        onClick={this.handleNewRental} style={{marginTop:
+                        '8px'}}/>
                     ) : ''}
 				</CardActions>
 
