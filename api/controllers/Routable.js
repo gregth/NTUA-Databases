@@ -43,11 +43,27 @@ class Routable {
                 });
                 
             }
-            [result] = await this.db.select(table, fields, conditions, orderBy, joins);
+            try {
+                [result] = await this.db.select(table, fields, conditions, orderBy, joins);
+            } catch(e) {
+                res.status(500);
+                res.send(e);
+                console.log(e);
+                return;
+            }
+                
         }
         else {
             conditions[optionalField.field_name] = req.params[optionalField.query];
-            [[result]] = await this.db.select(table, fields, conditions, orderBy, joins);
+
+            try {
+                [[result]] = await this.db.select(table, fields, conditions, orderBy, joins);
+            } catch(e) {
+                res.status(500);
+                res.send(e);
+                console.log(e);
+                return;
+            }
 
             if (!result) {
                 res.status(404);
@@ -70,8 +86,9 @@ class Routable {
         }
 
         let params = this.filter_keys(req.body, methodOptions.fields);
+        let result;
         try {
-            let [result] = await this.db.insert(this.options.table, params)
+            [result] = await this.db.insert(this.options.table, params)
             if (result.affectedRows != 1) {
                 res.status(500);
                 res.send("Error");
@@ -82,7 +99,7 @@ class Routable {
         } catch(e) {
             console.log(e);
             res.status(500);
-            res.send('Internal error.');
+            res.send(e);
         }
     }
 
@@ -97,10 +114,11 @@ class Routable {
         let methodOptions = this.options.put;
 
         let params = this.filter_keys(req.body, methodOptions.fields);
+        let result;
         try {
             let condition = {};
             condition[optionalField.field_name] = req.params[optionalField.query];
-            let [result] = await this.db.update(this.options.table, params, condition);
+            [result] = await this.db.update(this.options.table, params, condition);
             res.status(200);
             if (result.affectedRows != 1) {
                 res.status(500);
@@ -113,7 +131,7 @@ class Routable {
         } catch(e) {
             console.log(e);
             res.status(500);
-            res.send('Internal error.');
+            res.send(e);
         }
     }
 
@@ -142,7 +160,7 @@ class Routable {
         } catch(e) {
             console.log(e);
             res.status(500);
-            res.send('Internal error.');
+            res.send(e);
         }
     }
 

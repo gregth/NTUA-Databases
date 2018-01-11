@@ -65,10 +65,22 @@ class Vehicle extends Routable {
                 query += ` AND type = ?`;
                 substitutions.push(filters.type);
             }
-            [result] = await this.db.execute(query, substitutions);
+            try {
+                [result] = await this.db.execute(query, substitutions);
+            } catch(e) {
+                res.status(500);
+                console.log(e);
+                res.send(e);
+            }
         }
         else {
-            [result] = await this.db.select('vehicles', [], {vehicle_id: req.params.vehicleId}, []);
+            try{
+                [result] = await this.db.select('vehicles', [], {vehicle_id: req.params.vehicleId}, []);
+            } catch(e) {
+                res.status(500);
+                console.log(e);
+                res.send(e);
+            }
         }
 
         res.status(200);
