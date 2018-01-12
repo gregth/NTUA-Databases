@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-12 02:37:03 +0000
+# Generation Time: 2018-01-12 10:07:17 +0000
 # ************************************************************
 
 
@@ -299,22 +299,6 @@ DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
 
 
-# Dump of table new_table
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `new_table`;
-
-CREATE TABLE `new_table` (
-  `email_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(45) NOT NULL,
-  `store_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`email_id`),
-  KEY `store_idx` (`store_id`),
-  CONSTRAINT `store` FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
 # Dump of table rentals
 # ------------------------------------------------------------
 
@@ -339,6 +323,15 @@ CREATE TABLE `rentals` (
   CONSTRAINT `reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`reservation_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `rentals` WRITE;
+/*!40000 ALTER TABLE `rentals` DISABLE KEYS */;
+
+INSERT INTO `rentals` (`rental_id`, `receiver_employee_id`, `deliverer_employee_id`, `reservation_id`, `start_date`, `end_date`, `damage_score`)
+VALUES
+	(2,4,1,1,'2018-01-12 10:58:53','2018-01-12 11:00:17',2);
+
+/*!40000 ALTER TABLE `rentals` ENABLE KEYS */;
+UNLOCK TABLES;
 
 DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" */;;
@@ -634,15 +627,15 @@ LOCK TABLES `vehicles` WRITE;
 
 INSERT INTO `vehicles` (`vehicle_id`, `last_seen_at`, `store_id`, `type`, `brand`, `model`, `cc`, `horse_power`, `plate_number`, `buy_date`, `kilometers`, `last_service`, `next_service`, `insurance_expiration`, `price`)
 VALUES
-	(1,1,1,'moto','Aprilia','Pegaso Strada',650,48,'AZA3938','2016-04-08',23432,'2017-03-22','2018-04-10','2018-04-08',34),
-	(3,1,1,'car','Ford','Fiesta',1400,120,'AKA3240','2016-04-08',9322,'2017-01-26','2018-01-15','2018-04-08',53),
+	(1,1,1,'moto','Aprilias','Pegaso Strada',650,48,'AZA3938','2016-04-08',23432,'2017-03-22','2018-04-10','2018-04-08',34),
+	(3,1,1,'car','Ford','Fiesta',1400,120,'AKA3240','2016-04-08',9322,'2018-01-15','2018-05-15','2018-04-08',53),
 	(4,1,1,'atv','Yang','XI',250,30,'ZKA8539','2017-12-21',6531,'2018-04-10','2018-02-25','2018-01-07',15),
 	(5,1,1,'truck','Tesla','Semi',0,953,'IKO3293','2018-01-07',1320,'2018-01-08','2018-04-10','2018-02-07',132),
 	(6,1,1,'minivan','Nissan','Almera',1800,98,'KAO3928','2015-04-08',39211,'2018-04-10','2018-01-09','2018-01-29',43),
 	(7,2,2,'moto','Honda','CBR',990,110,'IKA3242','2016-04-08',39183,'2017-03-22','2018-04-10','2018-04-08',34),
 	(8,2,2,'car','Totoya','Corolla',1200,83,'AMA2351','2016-04-08',58372,'2017-01-26','2018-01-15','2018-04-08',53),
 	(9,2,2,'atv','Yang','XI',250,30,'OIK0953','2017-12-21',6531,'2018-04-10','2018-02-25','2018-01-07',15),
-	(10,2,2,'truck','Tesla','Semi',0,953,'TAA8673','2018-01-07',1320,'2018-01-08','2018-04-10','2018-02-07',132),
+	(10,3,2,'truck','Tesla','Semi',0,953,'TAA8673','2018-01-07',1320,'2018-01-08','2018-04-10','2018-02-07',132),
 	(11,2,2,'minivan','Nissan','Almera',1800,98,'EKA5123','2015-04-08',39211,'2018-04-10','2018-01-09','2018-01-29',43),
 	(12,3,3,'moto','Yamaha','XT',650,52,'IKI3928','2017-12-20',8539,'2018-01-01','2018-02-10','2018-02-21',29),
 	(13,3,3,'car','Totoya','Corolla',1200,83,'KAI2342','2016-04-08',58372,'2017-01-26','2018-01-15','2018-04-08',53),

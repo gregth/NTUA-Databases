@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-12 02:37:15 +0000
+# Generation Time: 2018-01-12 10:07:34 +0000
 # ************************************************************
 
 
@@ -228,22 +228,6 @@ DELIMITER ;;
      END */;;
 DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
-
-
-# Dump of table new_table
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `new_table`;
-
-CREATE TABLE `new_table` (
-  `email_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(45) NOT NULL,
-  `store_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`email_id`),
-  KEY `store_idx` (`store_id`),
-  CONSTRAINT `store` FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 
 # Dump of table rentals
