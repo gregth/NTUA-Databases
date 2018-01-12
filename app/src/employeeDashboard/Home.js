@@ -7,6 +7,7 @@ import axiosWrapper from '../axiosWrapper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CustomerItem from './CustomerItem';
+import Vehicle from './Vehicle';
 
 class EmployeeHome extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class EmployeeHome extends Component {
             },
             customers: [],
             bestCustomers: [],
+            vehiclesService: [],
         };
     }
 
@@ -40,6 +42,10 @@ class EmployeeHome extends Component {
                     this.setState(state);
                 });
             });
+        });
+
+        axiosWrapper.get('http://localhost:3001/statistics/vehicles_service').then(response => {
+            this.setState({vehiclesService: response.data});
         });
 
         axiosWrapper.get('http://localhost:3001/statistics/good_clients')
@@ -90,6 +96,17 @@ class EmployeeHome extends Component {
             bestCustomerItems = this.state.bestCustomers.map((item, index) => (<CustomerItem key={item.client_id} customer={item} refreshData={this.handleCustomerSearch} />));
         }
 
+        let vehicleServiceItems = null;
+        if (this.state.vehiclesService) {
+            vehicleServiceItems = this.state.vehiclesService.map((vehicle, index) => {
+                const data = {
+                    vehicle_id: vehicle.vehicle_id,
+                    vehicle,
+                }
+                return (<Vehicle data={data} key={index} refreshData={this.loadData} />);
+            });
+        }
+
         const fields = [
             {name: 'first_name', label: 'First Name'},
             {name: 'last_name', label: 'Last Name'},
@@ -128,6 +145,11 @@ class EmployeeHome extends Component {
                             <Subheader>Stores</Subheader>
                             <Divider />
                             {storeItems.length ? storeItems : ''}
+                            <div className='clear' />
+
+                            <Subheader>Expiring vehicle service</Subheader>
+                            <Divider />
+                            {vehicleServiceItems.length ? vehicleServiceItems : ''}
                             <div className='clear' />
 
                             <Subheader>Best clients</Subheader>

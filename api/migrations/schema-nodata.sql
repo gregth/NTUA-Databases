@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-12 01:01:14 +0000
+# Generation Time: 2018-01-12 02:24:45 +0000
 # ************************************************************
 
 
@@ -18,22 +18,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
-# Dump of table active_reservations
-# ------------------------------------------------------------
-
-DROP VIEW IF EXISTS `active_reservations`;
-
-CREATE TABLE `active_reservations` (
-   `first_name` VARCHAR(45) NOT NULL,
-   `last_name` VARCHAR(45) NOT NULL,
-   `identity_number` VARCHAR(10) NOT NULL,
-   `reservation_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-   `start_date` DATE NOT NULL,
-   `end_date` DATE NOT NULL
-) ENGINE=MyISAM;
-
 
 
 # Dump of table billings
@@ -189,6 +173,18 @@ CREATE TABLE `inactive_current_reservations` (
    `reservation_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
    `start_date` DATE NOT NULL,
    `end_date` DATE NOT NULL
+) ENGINE=MyISAM;
+
+
+
+# Dump of table income_per_store
+# ------------------------------------------------------------
+
+DROP VIEW IF EXISTS `income_per_store`;
+
+CREATE TABLE `income_per_store` (
+   `store_name` VARCHAR(45) NOT NULL,
+   `SUM(amount)` DOUBLE NULL DEFAULT NULL
 ) ENGINE=MyISAM;
 
 
@@ -498,10 +494,20 @@ DROP VIEW IF EXISTS `upcoming_services`;
 
 CREATE TABLE `upcoming_services` (
    `vehicle_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+   `last_seen_at` INT(10) UNSIGNED NOT NULL,
+   `store_id` INT(10) UNSIGNED NOT NULL,
+   `type` ENUM('car','atv','truck','minivan','moto') NOT NULL,
    `brand` VARCHAR(45) NOT NULL,
    `model` VARCHAR(45) NOT NULL,
+   `cc` INT(10) UNSIGNED NOT NULL,
+   `horse_power` INT(10) UNSIGNED NOT NULL,
    `plate_number` VARCHAR(45) NOT NULL,
+   `buy_date` DATE NOT NULL,
+   `kilometers` INT(11) NOT NULL,
+   `last_service` DATE NULL DEFAULT NULL,
    `next_service` DATE NOT NULL,
+   `insurance_expiration` DATE NOT NULL,
+   `price` DOUBLE NOT NULL,
    `store_name` VARCHAR(45) NOT NULL
 ) ENGINE=MyISAM;
 
@@ -547,20 +553,30 @@ DELIMITER ;
 
 
 
-# Replace placeholder table for active_reservations with correct view syntax
+# Replace placeholder table for upcoming_services with correct view syntax
 # ------------------------------------------------------------
 
-DROP TABLE `active_reservations`;
+DROP TABLE `upcoming_services`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `active_reservations`
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `upcoming_services`
 AS SELECT
-   `clients`.`first_name` AS `first_name`,
-   `clients`.`last_name` AS `last_name`,
-   `clients`.`identity_number` AS `identity_number`,
-   `reservations`.`reservation_id` AS `reservation_id`,
-   `reservations`.`start_date` AS `start_date`,
-   `reservations`.`end_date` AS `end_date`
-FROM ((`reservations` join `rentals` on((`rentals`.`reservation_id` = `reservations`.`reservation_id`))) join `clients` on((`clients`.`client_id` = `reservations`.`client_id`))) where isnull(`rentals`.`end_date`);
+   `v`.`vehicle_id` AS `vehicle_id`,
+   `v`.`last_seen_at` AS `last_seen_at`,
+   `v`.`store_id` AS `store_id`,
+   `v`.`type` AS `type`,
+   `v`.`brand` AS `brand`,
+   `v`.`model` AS `model`,
+   `v`.`cc` AS `cc`,
+   `v`.`horse_power` AS `horse_power`,
+   `v`.`plate_number` AS `plate_number`,
+   `v`.`buy_date` AS `buy_date`,
+   `v`.`kilometers` AS `kilometers`,
+   `v`.`last_service` AS `last_service`,
+   `v`.`next_service` AS `next_service`,
+   `v`.`insurance_expiration` AS `insurance_expiration`,
+   `v`.`price` AS `price`,
+   `s`.`store_name` AS `store_name`
+FROM (`vehicles` `v` join `stores` `s` on((`s`.`store_id` = `v`.`store_id`))) where (`v`.`next_service` <= (now() + interval 30 day));
 
 
 # Replace placeholder table for inactive_current_reservations with correct view syntax
@@ -579,20 +595,15 @@ AS SELECT
 FROM ((`reservations` left join `rentals` on((`rentals`.`reservation_id` = `reservations`.`reservation_id`))) join `clients` on((`clients`.`client_id` = `reservations`.`client_id`))) where (isnull(`rentals`.`rental_id`) and (`reservations`.`start_date` < now()) and (`reservations`.`end_date` > now()));
 
 
-# Replace placeholder table for upcoming_services with correct view syntax
+# Replace placeholder table for income_per_store with correct view syntax
 # ------------------------------------------------------------
 
-DROP TABLE `upcoming_services`;
+DROP TABLE `income_per_store`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `upcoming_services`
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `income_per_store`
 AS SELECT
-   `v`.`vehicle_id` AS `vehicle_id`,
-   `v`.`brand` AS `brand`,
-   `v`.`model` AS `model`,
-   `v`.`plate_number` AS `plate_number`,
-   `v`.`next_service` AS `next_service`,
-   `s`.`store_name` AS `store_name`
-FROM (`vehicles` `v` join `stores` `s` on((`s`.`store_id` = `v`.`store_id`))) where (`v`.`next_service` <= (now() + interval 30 day));
+   `s`.`store_name` AS `store_name`,sum(`r`.`amount`) AS `SUM(amount)`
+FROM ((`reservations` `r` join `vehicles` `v` on((`v`.`vehicle_id` = `r`.`vehicle_id`))) join `stores` `s` on((`s`.`store_id` = `v`.`store_id`))) group by `s`.`store_id`;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

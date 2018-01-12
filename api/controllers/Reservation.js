@@ -17,7 +17,7 @@ class Reservation extends Routable {
                 joins: [{ type: 'JOIN', table: 'clients AS c', on: 'r.client_id = c.client_id'}]
             },
             post: {
-                fields: ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date", "bd_id"]
+                fields: ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date", "bd_id", "has_paid"]
             },
             put: {
                 fields: ["amount", "store_id", "client_id", "vehicle_id", "start_date", "end_date"]
