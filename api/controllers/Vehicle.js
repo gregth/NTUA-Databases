@@ -47,9 +47,9 @@ class Vehicle extends Routable {
                             (SELECT vehicles.vehicle_id FROM vehicles
                                 JOIN reservations 
                                     ON reservations.vehicle_id = vehicles.vehicle_id
-                                WHERE start_date >= ? AND end_date <= ?
-                                    OR start_date <= ? AND end_date >= ?
-                                    OR start_date <= ? AND end_date >= ?)`;
+                                WHERE (start_date >= ? AND end_date <= ?)
+                                    OR (start_date <= ? AND end_date >= ?)
+                                    OR (start_date <= ? AND end_date >= ?))`;
                 let substitutions = [filters.store_id,
                     filters.start_date, filters.end_date,
                     filters.start_date, filters.start_date, 
@@ -67,6 +67,7 @@ class Vehicle extends Routable {
                     query += ` AND type = ?`;
                     substitutions.push(filters.type);
                 }
+                console.log(query);
                 try {
                     [result] = await this.db.execute(query, substitutions);
                     console.log(result);
