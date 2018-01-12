@@ -22,7 +22,7 @@ class Vehicle extends Component {
                 vehicle_id: data.vehicle_id,
                 store_id: data.store_id,
                 client_id: localStorage.getItem('clientId'),
-                has_paid: 0,
+                has_paid: 1,
 				company: false,
             },
         };
