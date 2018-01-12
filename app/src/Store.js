@@ -4,7 +4,7 @@ import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Vehicle from './Vehicle';
-import axios from 'axios';
+import axiosWrapper from './axiosWrapper';
 import moment from 'moment';
 import DatePicker from 'material-ui/DatePicker';
 
@@ -26,11 +26,11 @@ class Store extends Component {
     componentWillMount() {
         const {storeId} = this.props.match.params;
 
-        axios.get('http://localhost:3001/stores/' + storeId).then(response => {
+        axiosWrapper.get('http://localhost:3001/stores/' + storeId).then(response => {
             this.setState({details: response.data, dataReady: true});
         });
 
-        axios.get('http://localhost:3001/contacts/?store_id=' + storeId).then(response => {
+        axiosWrapper.get('http://localhost:3001/contacts/?store_id=' + storeId).then(response => {
             const phones = [];
             const emails = [];
             response.data.forEach(item => {
@@ -51,7 +51,7 @@ class Store extends Component {
             end_date: moment(state.end_date).format('YYYY-MM-DD HH:mm:ss'),
             store_id: this.props.match.params.storeId,
         }
-        axios.get('http://localhost:3001/vehicles', {params})
+        axiosWrapper.get('http://localhost:3001/vehicles', {params})
             .then(res => {
                 this.setState({vehicles: res.data});
             });
@@ -85,7 +85,7 @@ class Store extends Component {
                     end_date: this.state.end_date,
                     store_id: store.store_id,
                 }
-                return (<Vehicle data={data} key={index} history={this.props.history} />);
+                return (<Vehicle data={data} key={data.vehicle_id} history={this.props.history} />);
             });
         }
 

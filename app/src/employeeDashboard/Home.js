@@ -4,7 +4,7 @@ import Divider from 'material-ui/Divider';
 import { Route } from 'react-router'
 import StoreItem from '../StoreItem';
 import Subheader from 'material-ui/Subheader';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -22,13 +22,32 @@ class EmployeeHome extends Component {
                 identity_number: '',
             },
             customers: [],
+            bestCustomers: [],
         };
     }
 
     loadData() {
-        axios.get('http://localhost:3001/stores').then(response => {
+        axiosWrapper.get('http://localhost:3001/stores').then(response => {
             this.setState({stores: response.data});
+
+            axiosWrapper.get('http://localhost:3001/statistics/count_vehicles').then(response => {
+                const state = this.state;
+                response.data.forEach(storeInfo => {
+                    state.stores.forEach(store => {
+                        if (store.store_id == storeInfo.store_id) {
+                            store.vehicle_count = storeInfo.count;
+                        }
+                    });
+
+                    this.setState(state);
+                });
+            });
         });
+
+        axiosWrapper.get('http://localhost:3001/statistics/good_clients')
+            .then(res => {
+                this.setState({bestCustomers: res.data});
+            });
     }
 
     componentWillMount() {
@@ -51,7 +70,7 @@ class EmployeeHome extends Component {
             }
         });
 
-        axios.get('http://localhost:3001/clients/', {params})
+        axiosWrapper.get('http://localhost:3001/clients/', {params})
             .then(res => {
                 this.setState({customers: res.data});
             });
@@ -65,7 +84,12 @@ class EmployeeHome extends Component {
 
         let customerItems = [];
         if (this.state.customers.length) {
-            customerItems = this.state.customers.map((item, index) => (<CustomerItem key={index} customer={item} refreshData={this.handleCustomerSearch} />));
+            customerItems = this.state.customers.map((item, index) => (<CustomerItem key={item.client_id} customer={item} refreshData={this.handleCustomerSearch} />));
+        }
+
+        let bestCustomerItems = [];
+        if (this.state.bestCustomers.length) {
+            bestCustomerItems = this.state.bestCustomers.map((item, index) => (<CustomerItem key={item.client_id} customer={item} refreshData={this.handleCustomerSearch} />));
         }
 
         const fields = [
@@ -106,6 +130,11 @@ class EmployeeHome extends Component {
                             <Subheader>Stores</Subheader>
                             <Divider />
                             {storeItems.length ? storeItems : ''}
+                            <div className='clear' />
+
+                            <Subheader>Best clients</Subheader>
+                            <Divider />
+                            {bestCustomerItems.length ? bestCustomerItems : ''}
                             <div className='clear' />
                         </div>
                     </CardMedia>

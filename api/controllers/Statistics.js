@@ -8,7 +8,7 @@ class Statistics extends Routable {
     async get(req, res) {
         let result;
         if (req.params.type == 'count_vehicles') {
-            let query = `SELECT s.store_name, s.store_id, COUNT(vehicle_id) FROM
+            let query = `SELECT s.store_name, s.store_id, COUNT(vehicle_id) as count FROM
                 stores AS s, vehicles AS v WHERE v.store_id = s.store_id
                 GROUP BY s.store_id`;
             console.log("QUERY: " + query);
@@ -29,7 +29,7 @@ class Statistics extends Routable {
                 value.push(50);
             }
 
-            let query = `SELECT c.first_name, c.last_name, AVG(r.amount) 
+            let query = `SELECT c.*, AVG(r.amount) as avg_amount 
                 FROM reservations AS r 
                 JOIN clients AS c ON c.client_id = r.client_id
                 GROUP BY c.client_id

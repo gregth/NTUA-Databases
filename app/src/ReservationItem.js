@@ -3,7 +3,7 @@ import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Car
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
 import EditReservationDialog from './EditReservationDialog';
-import axios from 'axios';
+import axiosWrapper from './axiosWrapper';
 import moment from 'moment';
 
 class ReservationItem extends Component {
@@ -23,7 +23,7 @@ class ReservationItem extends Component {
     }
 
     handleCancel = () => {
-        axios.delete('http://localhost:3001/reservations/' + this.state.reservation.reservation_id)
+        axiosWrapper.delete('http://localhost:3001/reservations/' + this.state.reservation.reservation_id)
             .then(() => {
                 this.props.refreshData();
             });
@@ -35,7 +35,8 @@ class ReservationItem extends Component {
             reservation_id: this.state.reservation.reservation_id,
             deliverer_employee_id: this.props.employeeId,
         };
-        axios.post('http://localhost:3001/rentals/', rentalData)
+
+        axiosWrapper.post('http://localhost:3001/rentals/', rentalData)
             .then(res => {
                 this.props.refreshData();
             });
@@ -61,16 +62,14 @@ class ReservationItem extends Component {
         }
 
         Promise.all([
-            axios.get('http://localhost:3001/stores/' + reservation.store_id),
-            axios.get('http://localhost:3001/vehicles/' + reservation.vehicle_id),
+            axiosWrapper.get('http://localhost:3001/stores/' + reservation.store_id),
+            axiosWrapper.get('http://localhost:3001/vehicles/' + reservation.vehicle_id),
         ]).then(([store, vehicle]) => {
             this.setState({
                 dataReady: true,
                 store: store.data,
                 vehicle: vehicle.data[0],
             });
-        }).catch(err => {
-            console.log(err);
         });
     }
 

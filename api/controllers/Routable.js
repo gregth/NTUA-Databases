@@ -157,7 +157,7 @@ class Routable {
                 return;
             }
             res.status(200);
-            res.send('Succesfule deleted resource.');
+            res.send('Successful deleted resource.');
         } catch(e) {
             console.log(e);
             res.status(500);

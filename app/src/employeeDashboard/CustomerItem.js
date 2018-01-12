@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 
 class CustomerItem extends Component {
     handleRemove = () => {
-        axios.delete('http://localhost:3001/clients/' + this.props.customer.client_id)
+        axiosWrapper.delete('http://localhost:3001/clients/' + this.props.customer.client_id)
             .then(() => {
                 this.props.refreshData();
             });
@@ -26,14 +26,15 @@ class CustomerItem extends Component {
             {name: 'country', label: 'Country'},
             {name: 'email', label: 'Email'},
             {name: 'identity_number', label: 'Identification Number'},
+            {name: 'avg_amount', label: 'Average amount $'},
         ];
         const customerDetails = fields.map((item, index) => (
-            <ListItem
+            customer[item.name] ? (<ListItem
                 key={index}
                 disabled={true}
                 primaryText={item.label}
                 style={{padding: '8px 0'}}
-                secondaryText={customer[item.name]}/>
+                secondaryText={customer[item.name]}/>) : ''
         ));
 
         return (
@@ -44,7 +45,7 @@ class CustomerItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton href={'/employee/customer/' + customer.client_id} label='Edit'/>
+					<RaisedButton href={'/employee/customer/' + customer.client_id} label='View'/>
 					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Remove' onClick={this.handleRemove} />
 				</CardActions>
             </Card>

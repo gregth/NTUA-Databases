@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import axios from 'axios';
+import axiosWrapper from './axiosWrapper';
 import qs from 'qs';
 
 class Register extends Component {
@@ -27,14 +27,11 @@ class Register extends Component {
     }
 
     handleRegister = () => {
-        axios.post('http://localhost:3001/clients', qs.stringify(this.state))
-            .then(data => {
-                console.log('success');
-                console.log(data);
-            })
-            .catch(err => {
-                console.log('error');
-                console.log(err);
+        axiosWrapper.post('http://localhost:3001/clients', qs.stringify(this.state))
+            .then(res => {
+                console.log(res.data);
+                localStorage.setItem('clientId', res.data.resource_id);
+                this.props.history.push('/home');
             });
     }
 
@@ -92,6 +89,7 @@ class Register extends Component {
                     onChange={this.handleInputChange}
                     value={this.state[item.name]}
                     fullWidth
+                    type={item.name == 'password' ? 'password' : 'text'}
                     floatingLabelText={item.label}
                     floatingLabelFixed={true}
                 />);

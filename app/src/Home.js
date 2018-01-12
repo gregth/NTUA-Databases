@@ -4,7 +4,7 @@ import Divider from 'material-ui/Divider';
 import ReservationItem from './ReservationItem';
 import StoreItem from './StoreItem';
 import Subheader from 'material-ui/Subheader';
-import axios from 'axios';
+import axiosWrapper from './axiosWrapper';
 import moment from 'moment';
 
 class Home extends Component {
@@ -14,15 +14,16 @@ class Home extends Component {
         this.state = {
             stores: null,
             reservations: null,
+            clientId: localStorage.getItem('clientId'),
         };
     }
 
     loadData() {
-        axios.get('http://localhost:3001/stores').then(response => {
+        axiosWrapper.get('http://localhost:3001/stores').then(response => {
             this.setState({stores: response.data});
         });
 
-        axios.get('http://localhost:3001/reservations/?client_id=11').then(response => {
+        axiosWrapper.get('http://localhost:3001/reservations/?client_id=' + this.state.clientId).then(response => {
             const reservations = response.data;
             reservations.forEach(item => {
                 item.start_date = moment(item.start_date).format("YYYY-MM-DD HH:mm:ss");

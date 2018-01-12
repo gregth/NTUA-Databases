@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
-import axios from 'axios';
+import axiosWrapper from './axiosWrapper';
 import moment from 'moment';
 import ReservationDialog from './ReservationDialog';
 
@@ -21,7 +21,7 @@ class Vehicle extends Component {
                 end_date: moment(data.end_date).startOf('day').format("YYYY-MM-DD HH:mm:ss"),
                 vehicle_id: data.vehicle_id,
                 store_id: data.store_id,
-                client_id: 11,
+                client_id: localStorage.getItem('clientId'),
                 has_paid: 0,
 				company: false,
             },
@@ -38,7 +38,7 @@ class Vehicle extends Component {
 
     handleSubmit = (billingData) => {
         this.setState({bookingStatus: 'pending'});
-        axios.post('http://localhost:3001/billings', billingData)
+        axiosWrapper.post('http://localhost:3001/billings', billingData)
             .then(response => {
                 const billingId = response.data.resource_id;
 
@@ -51,7 +51,7 @@ class Vehicle extends Component {
                 postData.amount = amount;
                 postData.bd_id = billingId;
 
-                return axios.post('http://localhost:3001/reservations', postData)
+                return axiosWrapper.post('http://localhost:3001/reservations', postData)
             })
             .then(response => {
                 if (response.data.resource_id) {
