@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-12 02:24:45 +0000
+# Generation Time: 2018-01-12 02:37:15 +0000
 # ************************************************************
 
 
@@ -184,7 +184,7 @@ DROP VIEW IF EXISTS `income_per_store`;
 
 CREATE TABLE `income_per_store` (
    `store_name` VARCHAR(45) NOT NULL,
-   `SUM(amount)` DOUBLE NULL DEFAULT NULL
+   `amount` DOUBLE NULL DEFAULT NULL
 ) ENGINE=MyISAM;
 
 
@@ -602,7 +602,7 @@ DROP TABLE `income_per_store`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `income_per_store`
 AS SELECT
-   `s`.`store_name` AS `store_name`,sum(`r`.`amount`) AS `SUM(amount)`
+   `s`.`store_name` AS `store_name`,sum(`r`.`amount`) AS `amount`
 FROM ((`reservations` `r` join `vehicles` `v` on((`v`.`vehicle_id` = `r`.`vehicle_id`))) join `stores` `s` on((`s`.`store_id` = `v`.`store_id`))) group by `s`.`store_id`;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
