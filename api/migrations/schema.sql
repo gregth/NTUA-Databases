@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-12 00:21:08 +0000
+# Generation Time: 2018-01-12 01:00:11 +0000
 # ************************************************************
 
 
@@ -70,7 +70,10 @@ VALUES
 	(7,1,'Company','324','gra','thesn',3242,'hfhs','3959599','393939'),
 	(8,0,'First','ste','gr','ath',0,'gr','393939',NULL),
 	(9,0,'asdf','asdflkj','jkl','jk',9324,'jlk','jlk',NULL),
-	(10,0,'Themistoklis Papameletiou','16','Gravias','Kaisariani',16122,'Greece','6983317150',NULL);
+	(10,0,'Themistoklis Papameletiou','16','Gravias','Kaisariani',16122,'Greece','6983317150',NULL),
+	(11,1,'Company','234jk','kljlk','jkl',234234,'jl','23423423','3234234'),
+	(12,1,'Company','234jk','kljlk','jkl',234234,'jl','23423423','3234234'),
+	(13,1,'Company','lkj','lkj','jk',324,'lkj','234234','234234');
 
 /*!40000 ALTER TABLE `billings` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -94,6 +97,7 @@ CREATE TABLE `clients` (
   `street_number` varchar(10) NOT NULL,
   `email` varchar(45) NOT NULL DEFAULT '',
   `password` varchar(45) NOT NULL DEFAULT '',
+  `identity_type` enum('passport','identity') NOT NULL,
   PRIMARY KEY (`client_id`),
   UNIQUE KEY `employee_id_UNIQUE` (`client_id`),
   UNIQUE KEY `identity_number_UNIQUE` (`identity_number`),
@@ -107,11 +111,11 @@ CREATE TABLE `clients` (
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
 
-INSERT INTO `clients` (`client_id`, `license_id`, `identity_number`, `first_name`, `last_name`, `street_name`, `postal_code`, `city`, `country`, `street_number`, `email`, `password`)
+INSERT INTO `clients` (`client_id`, `license_id`, `identity_number`, `first_name`, `last_name`, `street_name`, `postal_code`, `city`, `country`, `street_number`, `email`, `password`, `identity_type`)
 VALUES
-	(11,15,'kfdjffgs','Giannis','Kostoglous','Graviass',12222221,'Kaisarianis','Greeces','166','themicp@gma.com','123456'),
-	(12,NULL,'BB1111','Grigorios','Thanasolas','STREETTT',152,'Athens','Greece','992','greg@gmail.com','98765'),
-	(22,16,'AH607390','Themistoklis','Papameletiou','Gravias',16122,'Kaisariani','Greece','16','themicp@gmail.com','123456');
+	(11,15,'kfdjffgs','Giannis','Kostoglous','Graviass',12222221,'Kaisarianis','Greeces','166','themicp@gma.com','123456','identity'),
+	(12,NULL,'BB1111','Grigorios','Thanasolas','STREETTT',152,'Athens','Greece','992','greg@gmail.com','98765','identity'),
+	(22,16,'AH607390','Themistoklis','Papameletiou','Gravias',16122,'Kaisariani','Greece','16','themicp@gmail.com','123456','identity');
 
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -443,7 +447,8 @@ LOCK TABLES `reservations` WRITE;
 
 INSERT INTO `reservations` (`reservation_id`, `client_id`, `vehicle_id`, `start_date`, `end_date`, `has_paid`, `store_id`, `amount`, `bd_id`)
 VALUES
-	(34,22,1,'2018-01-12','2018-01-20',0,1,272,10);
+	(34,22,1,'2018-01-12','2018-01-20',0,1,272,10),
+	(36,22,17,'2018-01-24','2018-01-28',0,1,136,13);
 
 /*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
 UNLOCK TABLES;
