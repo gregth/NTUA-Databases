@@ -40,7 +40,7 @@ class Login extends Component {
     render() {
         const {userType} = this.props.match.params;
         return (
-            <div>
+            <div style={{textAlign: 'center'}}>
                 <TextField
                     name={userType + 'Id'}
                     onChange={this.handleInputChange}
