@@ -8,6 +8,14 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CustomerItem from './CustomerItem';
 import Vehicle from './Vehicle';
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow,
+    TableRowColumn,
+} from 'material-ui/Table';
 
 class EmployeeHome extends Component {
     constructor(props) {
@@ -23,6 +31,7 @@ class EmployeeHome extends Component {
             customers: [],
             bestCustomers: [],
             vehiclesService: [],
+            income: [],
         };
     }
 
@@ -51,6 +60,11 @@ class EmployeeHome extends Component {
         axiosWrapper.get('http://localhost:3001/statistics/good_clients')
             .then(res => {
                 this.setState({bestCustomers: res.data});
+            });
+
+        axiosWrapper.get('http://localhost:3001/statistics/income')
+            .then(res => {
+                this.setState({income: res.data});
             });
     }
 
@@ -107,6 +121,16 @@ class EmployeeHome extends Component {
             });
         }
 
+        let incomeRows = [];
+        if (this.state.income.length) {
+            incomeRows = this.state.income.map((item, index) => (
+                <TableRow>
+                    <TableRowColumn>{item.store_name}</TableRowColumn>
+                    <TableRowColumn>{item.amount}</TableRowColumn>
+                </TableRow>
+            ));
+        }
+
         const fields = [
             {name: 'first_name', label: 'First Name'},
             {name: 'last_name', label: 'Last Name'},
@@ -147,14 +171,30 @@ class EmployeeHome extends Component {
                             {storeItems.length ? storeItems : ''}
                             <div className='clear' />
 
-                            <Subheader>Expiring vehicle service</Subheader>
-                            <Divider />
-                            {vehicleServiceItems.length ? vehicleServiceItems : ''}
-                            <div className='clear' />
-
                             <Subheader>Best clients</Subheader>
                             <Divider />
                             {bestCustomerItems.length ? bestCustomerItems : ''}
+                            <div className='clear' />
+
+                            <Subheader>Stores income</Subheader>
+                            <Divider />
+                            {incomeRows.length ? (
+							<Table selectable={false}>
+								<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+									<TableRow>
+										<TableHeaderColumn>Store Name</TableHeaderColumn>
+										<TableHeaderColumn>Income $</TableHeaderColumn>
+									</TableRow>
+								</TableHeader>
+								<TableBody displayRowCheckbox={false}>
+                                    {incomeRows}
+								</TableBody>
+							</Table>) : ''}
+                            <div className='clear' />
+
+                            <Subheader>Expiring vehicle service</Subheader>
+                            <Divider />
+                            {vehicleServiceItems.length ? vehicleServiceItems : ''}
                             <div className='clear' />
                         </div>
                     </CardMedia>
