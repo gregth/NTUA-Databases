@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-12 01:01:14 +0000
+# Generation Time: 2018-01-12 02:00:58 +0000
 # ************************************************************
 
 
@@ -498,10 +498,20 @@ DROP VIEW IF EXISTS `upcoming_services`;
 
 CREATE TABLE `upcoming_services` (
    `vehicle_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+   `last_seen_at` INT(10) UNSIGNED NOT NULL,
+   `store_id` INT(10) UNSIGNED NOT NULL,
+   `type` ENUM('car','atv','truck','minivan','moto') NOT NULL,
    `brand` VARCHAR(45) NOT NULL,
    `model` VARCHAR(45) NOT NULL,
+   `cc` INT(10) UNSIGNED NOT NULL,
+   `horse_power` INT(10) UNSIGNED NOT NULL,
    `plate_number` VARCHAR(45) NOT NULL,
+   `buy_date` DATE NOT NULL,
+   `kilometers` INT(11) NOT NULL,
+   `last_service` DATE NULL DEFAULT NULL,
    `next_service` DATE NOT NULL,
+   `insurance_expiration` DATE NOT NULL,
+   `price` DOUBLE NOT NULL,
    `store_name` VARCHAR(45) NOT NULL
 ) ENGINE=MyISAM;
 
@@ -587,10 +597,20 @@ DROP TABLE `upcoming_services`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `upcoming_services`
 AS SELECT
    `v`.`vehicle_id` AS `vehicle_id`,
+   `v`.`last_seen_at` AS `last_seen_at`,
+   `v`.`store_id` AS `store_id`,
+   `v`.`type` AS `type`,
    `v`.`brand` AS `brand`,
    `v`.`model` AS `model`,
+   `v`.`cc` AS `cc`,
+   `v`.`horse_power` AS `horse_power`,
    `v`.`plate_number` AS `plate_number`,
+   `v`.`buy_date` AS `buy_date`,
+   `v`.`kilometers` AS `kilometers`,
+   `v`.`last_service` AS `last_service`,
    `v`.`next_service` AS `next_service`,
+   `v`.`insurance_expiration` AS `insurance_expiration`,
+   `v`.`price` AS `price`,
    `s`.`store_name` AS `store_name`
 FROM (`vehicles` `v` join `stores` `s` on((`s`.`store_id` = `v`.`store_id`))) where (`v`.`next_service` <= (now() + interval 30 day));
 

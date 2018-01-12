@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: ntua-rental
-# Generation Time: 2018-01-12 01:00:11 +0000
+# Generation Time: 2018-01-12 02:00:36 +0000
 # ************************************************************
 
 
@@ -61,19 +61,7 @@ LOCK TABLES `billings` WRITE;
 
 INSERT INTO `billings` (`bd_id`, `is_company`, `name`, `street_number`, `street_name`, `city`, `postal_code`, `country`, `phone`, `trn`)
 VALUES
-	(1,1,'Giannis Manousopoulos','6A','Kokkinopoulou','Zografou',27054,'Greece','6979680787',NULL),
-	(2,0,'INTRACOM','64','Oulof Palme','Zografou',15779,'Greece','6979680787',NULL),
-	(3,0,'INTRACOM','64','Oulof Palme','Zografou',15779,'Greece','6979680787',NULL),
-	(4,0,'INTRACOM','64','Oulof Palme','Zografou',15779,'Greece','6979680787',NULL),
-	(5,1,'company','12','gravias','athe',234234,'greece','693938','9999999999'),
-	(6,1,'company','12','gravias','athe',234234,'greece','693938','9999999999'),
-	(7,1,'Company','324','gra','thesn',3242,'hfhs','3959599','393939'),
-	(8,0,'First','ste','gr','ath',0,'gr','393939',NULL),
-	(9,0,'asdf','asdflkj','jkl','jk',9324,'jlk','jlk',NULL),
-	(10,0,'Themistoklis Papameletiou','16','Gravias','Kaisariani',16122,'Greece','6983317150',NULL),
-	(11,1,'Company','234jk','kljlk','jkl',234234,'jl','23423423','3234234'),
-	(12,1,'Company','234jk','kljlk','jkl',234234,'jl','23423423','3234234'),
-	(13,1,'Company','lkj','lkj','jk',324,'lkj','234234','234234');
+	(1,0,'Giannis Dimitriou','35','Pallinis','Pella',23523,'Greece','690832723',NULL);
 
 /*!40000 ALTER TABLE `billings` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -113,9 +101,9 @@ LOCK TABLES `clients` WRITE;
 
 INSERT INTO `clients` (`client_id`, `license_id`, `identity_number`, `first_name`, `last_name`, `street_name`, `postal_code`, `city`, `country`, `street_number`, `email`, `password`, `identity_type`)
 VALUES
-	(11,15,'kfdjffgs','Giannis','Kostoglous','Graviass',12222221,'Kaisarianis','Greeces','166','themicp@gma.com','123456','identity'),
-	(12,NULL,'BB1111','Grigorios','Thanasolas','STREETTT',152,'Athens','Greece','992','greg@gmail.com','98765','identity'),
-	(22,16,'AH607390','Themistoklis','Papameletiou','Gravias',16122,'Kaisariani','Greece','16','themicp@gmail.com','123456','identity');
+	(1,NULL,'AH32923','Anna','Grigoriou','Kallirois',13513,'Athens','Greece','13','anna@me.com','123456','identity'),
+	(2,6,'BA3928','Giannis','Dimitriou','Pallinis',13857,'Pella','Greece','1','halbi@gmail.com','09987','identity'),
+	(3,NULL,'351837','David','Bowe','Groove St.',99482,'New York','US','32','david@yahoo.gr','3839839','passport');
 
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -161,7 +149,22 @@ LOCK TABLES `contacts` WRITE;
 
 INSERT INTO `contacts` (`contact_id`, `value`, `store_id`, `type`)
 VALUES
-	(1,'',NULL,NULL);
+	(1,'693827163',1,'telephone'),
+	(2,'2105830275',1,'telephone'),
+	(3,'store@rental.com',1,'email'),
+	(4,'email2@store.com',1,'email'),
+	(5,'2109582752',2,'telephone'),
+	(6,'693827529',2,'telephone'),
+	(7,'store2@rental.com',2,'email'),
+	(8,'store2alt@rental.com',2,'email'),
+	(9,'2119482510',3,'telephone'),
+	(10,'6957925322',3,'telephone'),
+	(11,'store3@rental.com',3,'email'),
+	(12,'alt3@rental.com',3,'email'),
+	(13,'6933856086',4,'telephone'),
+	(14,'2115938751',4,'telephone'),
+	(15,'store4@rental.com',4,'email'),
+	(16,'alt4@rental.com',4,'email');
 
 /*!40000 ALTER TABLE `contacts` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -201,12 +204,10 @@ LOCK TABLES `employees` WRITE;
 
 INSERT INTO `employees` (`employee_id`, `license_id`, `store_id`, `identity_number`, `first_name`, `last_name`, `street_name`, `postal_code`, `city`, `country`, `street_number`, `role`, `start_date`, `end_date`)
 VALUES
-	(1,NULL,1,'2345','Thanasoulas','Georgios','vf',1233,'tgt','g','fr223','admin','2010-09-09 00:00:00',NULL),
-	(2,NULL,2,'AM 2345','Giannis','fgfg','vf',1233,'tgt','g','fr223','admin','2010-09-09 00:00:00','2011-09-09 00:00:00'),
-	(3,NULL,3,'HAK 2343','Giannis','fgfg','vf',1233,'tgt','g','fr223','admin','2010-09-09 00:00:00','2011-09-09 00:00:00'),
-	(4,NULL,1,'BG','ffff','fgfg','vf',1233,'tgt','g','fr223','admin','2010-09-09 00:00:00','2011-09-09 00:00:00'),
-	(5,NULL,1,'232ss32ss','Thanasoulas','Giannis','vf',1233,'tgt','g','fr223','admin','2010-09-09 00:00:00','2011-09-09 00:00:00'),
-	(6,13,1,'234533','Ti','thes ','aa',23,'dfsdfas','adfadsfasd','dsafdasfas','secretary','2018-01-10 00:00:00','2018-02-09 00:00:00');
+	(1,1,1,'AB3018','George','Thanasoulas','Oulof',19481,'Athens','Greece','23','admin','2017-08-19 00:00:00',NULL),
+	(3,3,2,'AH3202','Giannis','Papameletiou','Theologou',39281,'Patra','Greece','11','admin','2017-02-19 00:00:00',NULL),
+	(4,4,3,'AI0320','Maria','Papagiannis','Papagou',13048,'Thessaloniki','Greece','3','admin','2017-12-03 00:00:00',NULL),
+	(7,5,4,'BA2343','Nikos','Mitis','Kallirois',12032,'Kriti','Greece','52','admin','2017-02-05 00:00:00',NULL);
 
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -272,10 +273,11 @@ LOCK TABLES `licenses` WRITE;
 
 INSERT INTO `licenses` (`license_id`, `atv`, `car`, `moto`, `minivan`, `truck`, `license_number`)
 VALUES
-	(1,0,0,1,1,1,1),
-	(13,1,1,0,1,1,1333),
-	(15,1,1,1,0,0,11111),
-	(16,0,1,1,0,0,301983);
+	(1,0,1,0,0,0,5938671),
+	(3,1,1,1,0,0,2342353),
+	(4,0,1,1,0,1,4103727),
+	(5,0,1,0,0,1,3920382),
+	(6,0,1,0,0,1,592837);
 
 /*!40000 ALTER TABLE `licenses` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -346,7 +348,7 @@ LOCK TABLES `rentals` WRITE;
 
 INSERT INTO `rentals` (`rental_id`, `receiver_employee_id`, `deliverer_employee_id`, `reservation_id`, `start_date`, `end_date`, `damage_score`)
 VALUES
-	(5,3,1,34,'2018-01-12 02:11:26','2018-01-12 02:17:09',32);
+	(1,3,3,1,'2018-01-12 03:58:42','2018-01-12 03:58:51',0);
 
 /*!40000 ALTER TABLE `rentals` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -447,8 +449,7 @@ LOCK TABLES `reservations` WRITE;
 
 INSERT INTO `reservations` (`reservation_id`, `client_id`, `vehicle_id`, `start_date`, `end_date`, `has_paid`, `store_id`, `amount`, `bd_id`)
 VALUES
-	(34,22,1,'2018-01-12','2018-01-20',0,1,272,10),
-	(36,22,17,'2018-01-24','2018-01-28',0,1,136,13);
+	(1,2,10,'2018-01-12','2018-01-15',0,2,396,1);
 
 /*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -580,9 +581,10 @@ LOCK TABLES `stores` WRITE;
 
 INSERT INTO `stores` (`store_id`, `street_number`, `street_name`, `postal_code`, `city`, `country`, `store_name`)
 VALUES
-	(1,'6A','Kokkinopoulou','15773','Athens','GR','Rental Kokkinopoulou\n'),
-	(2,'72','Leof. Vasilissis Sofias','11521','Athens','GR','Rental Syntagma'),
-	(3,'414','Mesogion Av.','15343','Agia Paraskevi','GR','Rental Agia Paraskevi');
+	(1,'6','Kokkinopoulou','17111','Athens','Greece','Kokkinopoulou'),
+	(2,'23','Evgenidou','19381','Pagrati','Greece','Evgenidou'),
+	(3,'32','Mpotsari','17492','Patra','Greece','Mpotsari'),
+	(4,'2','Mikras Asias','19384','Thessaloniki','Greece','Mikras asias');
 
 /*!40000 ALTER TABLE `stores` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -595,10 +597,20 @@ DROP VIEW IF EXISTS `upcoming_services`;
 
 CREATE TABLE `upcoming_services` (
    `vehicle_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+   `last_seen_at` INT(10) UNSIGNED NOT NULL,
+   `store_id` INT(10) UNSIGNED NOT NULL,
+   `type` ENUM('car','atv','truck','minivan','moto') NOT NULL,
    `brand` VARCHAR(45) NOT NULL,
    `model` VARCHAR(45) NOT NULL,
+   `cc` INT(10) UNSIGNED NOT NULL,
+   `horse_power` INT(10) UNSIGNED NOT NULL,
    `plate_number` VARCHAR(45) NOT NULL,
+   `buy_date` DATE NOT NULL,
+   `kilometers` INT(11) NOT NULL,
+   `last_service` DATE NULL DEFAULT NULL,
    `next_service` DATE NOT NULL,
+   `insurance_expiration` DATE NOT NULL,
+   `price` DOUBLE NOT NULL,
    `store_name` VARCHAR(45) NOT NULL
 ) ENGINE=MyISAM;
 
@@ -635,15 +647,26 @@ LOCK TABLES `vehicles` WRITE;
 
 INSERT INTO `vehicles` (`vehicle_id`, `last_seen_at`, `store_id`, `type`, `brand`, `model`, `cc`, `horse_power`, `plate_number`, `buy_date`, `kilometers`, `last_service`, `next_service`, `insurance_expiration`, `price`)
 VALUES
-	(1,1,1,'car','Tesla','Model 3',0,0,'HAK 2176','2017-09-08',10985,'2020-01-28','2022-01-28','2018-09-08',34),
-	(2,1,12,'atv','Toyota','CV',22,22,'HAK 2345','2018-01-01',23,'2018-01-01','2018-01-01','2018-01-01',33),
-	(8,1,12,'atv','Toyota','CV',22,22,'HAK 2342','2018-01-01',23,'2018-01-01','2018-01-01','2018-01-01',23),
-	(9,3,12,'atv','TOYOTA','CV',22,22,'HAK 2343','2018-01-01',23,'2018-01-01','2018-01-01','2018-01-01',62),
-	(12,3,1,'car','Tesla','ubj',23,233,'ABH 3454','2919-08-01',12,'2919-08-01','2919-08-01','2919-08-01',11),
-	(13,3,12,'atv','TOYOTA','CV',22,22,'HAK 2341','2018-01-01',23,'2018-01-01','2018-01-01','2018-01-01',93),
-	(14,3,2,'atv','TOYOTA','CV',22,22,'HAK 2389','2018-01-01',23,'2018-01-01','2018-01-01','2018-01-01',51),
-	(16,3,2,'atv','MAZDA','CV',22,22,'HAK 2354','2018-01-01',23,'2018-01-01','2018-01-01','2018-01-01',63),
-	(17,1,1,'moto','Aprilia','Pegaso Strada',650,48,'AKE3910','2016-06-12',85311,'2018-01-03','2018-03-03','2018-02-15',34);
+	(1,1,1,'moto','Aprilia','Pegaso Strada',650,48,'AZA3938','2016-04-08',23432,'2017-03-22','2018-04-10','2018-04-08',34),
+	(3,1,1,'car','Ford','Fiesta',1400,120,'AKA3240','2016-04-08',9322,'2017-01-26','2018-01-15','2018-04-08',53),
+	(4,1,1,'atv','Yang','XI',250,30,'ZKA8539','2017-12-21',6531,'2018-04-10','2018-02-25','2018-01-07',15),
+	(5,1,1,'truck','Tesla','Semi',0,953,'IKO3293','2018-01-07',1320,'2018-01-08','2018-04-10','2018-02-07',132),
+	(6,1,1,'minivan','Nissan','Almera',1800,98,'KAO3928','2015-04-08',39211,'2018-04-10','2018-01-09','2018-01-29',43),
+	(7,2,2,'moto','Honda','CBR',990,110,'IKA3242','2016-04-08',39183,'2017-03-22','2018-04-10','2018-04-08',34),
+	(8,2,2,'car','Totoya','Corolla',1200,83,'AMA2351','2016-04-08',58372,'2017-01-26','2018-01-15','2018-04-08',53),
+	(9,2,2,'atv','Yang','XI',250,30,'OIK0953','2017-12-21',6531,'2018-04-10','2018-02-25','2018-01-07',15),
+	(10,2,2,'truck','Tesla','Semi',0,953,'TAA8673','2018-01-07',1320,'2018-01-08','2018-04-10','2018-02-07',132),
+	(11,2,2,'minivan','Nissan','Almera',1800,98,'EKA5123','2015-04-08',39211,'2018-04-10','2018-01-09','2018-01-29',43),
+	(12,3,3,'moto','Yamaha','XT',650,52,'IKI3928','2017-12-20',8539,'2018-01-01','2018-02-10','2018-02-21',29),
+	(13,3,3,'car','Totoya','Corolla',1200,83,'KAI2342','2016-04-08',58372,'2017-01-26','2018-01-15','2018-04-08',53),
+	(14,3,3,'atv','Yang','XI',250,30,'IDK3908','2017-12-21',6531,'2018-04-10','2018-02-25','2018-01-07',15),
+	(15,3,3,'truck','Tesla','Semi',0,953,'AJN2343','2018-01-07',1320,'2018-01-08','2018-04-10','2018-02-07',132),
+	(16,3,3,'minivan','Nissan','Almera',1800,98,'OOI0887','2015-04-08',39211,'2018-04-10','2018-01-09','2018-01-29',43),
+	(17,4,4,'moto','Yamaha','XT',650,52,'JKA3250','2017-12-20',8539,'2018-01-01','2018-02-10','2018-02-21',29),
+	(18,4,4,'car','Totoya','Corolla',1200,83,'OAI0930','2016-04-08',58372,'2017-01-26','2018-01-15','2018-04-08',53),
+	(19,4,4,'atv','Yang','XI',250,30,'BMA3871','2017-12-21',6531,'2018-04-10','2018-02-25','2018-01-07',15),
+	(20,4,4,'truck','Tesla','Semi',0,953,'BAQ7683','2018-01-07',1320,'2018-01-08','2018-04-10','2018-02-07',132),
+	(21,4,4,'minivan','Nissan','Almera',1800,98,'PAO7837','2015-04-08',39211,'2018-04-10','2018-01-09','2018-01-29',43);
 
 /*!40000 ALTER TABLE `vehicles` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -701,10 +724,20 @@ DROP TABLE `upcoming_services`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `upcoming_services`
 AS SELECT
    `v`.`vehicle_id` AS `vehicle_id`,
+   `v`.`last_seen_at` AS `last_seen_at`,
+   `v`.`store_id` AS `store_id`,
+   `v`.`type` AS `type`,
    `v`.`brand` AS `brand`,
    `v`.`model` AS `model`,
+   `v`.`cc` AS `cc`,
+   `v`.`horse_power` AS `horse_power`,
    `v`.`plate_number` AS `plate_number`,
+   `v`.`buy_date` AS `buy_date`,
+   `v`.`kilometers` AS `kilometers`,
+   `v`.`last_service` AS `last_service`,
    `v`.`next_service` AS `next_service`,
+   `v`.`insurance_expiration` AS `insurance_expiration`,
+   `v`.`price` AS `price`,
    `s`.`store_name` AS `store_name`
 FROM (`vehicles` `v` join `stores` `s` on((`s`.`store_id` = `v`.`store_id`))) where (`v`.`next_service` <= (now() + interval 30 day));
 
