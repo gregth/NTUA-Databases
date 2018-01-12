@@ -3,7 +3,7 @@ import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Car
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
 import EndRentalDialog from './EndRentalDialog';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 
 class RentalItem extends Component {
@@ -24,7 +24,7 @@ class RentalItem extends Component {
             end_date: moment().format("YYYY-MM-DD HH:mm:ss"),
             damage_score,
         }
-        axios.put('http://localhost:3001/rentals/' + this.props.rental.rental_id, rentalData)
+        axiosWrapper.put('http://localhost:3001/rentals/' + this.props.rental.rental_id, rentalData)
             .then(res => {
                 console.log(res);
                 this.handleDialogClose();
@@ -48,16 +48,14 @@ class RentalItem extends Component {
         }
 
         Promise.all([
-            axios.get('http://localhost:3001/stores/' + rental.store_id),
-            axios.get('http://localhost:3001/vehicles/' + rental.vehicle_id),
+            axiosWrapper.get('http://localhost:3001/stores/' + rental.store_id),
+            axiosWrapper.get('http://localhost:3001/vehicles/' + rental.vehicle_id),
         ]).then(([store, vehicle]) => {
             this.setState({
                 dataReady: true,
                 store: store.data,
                 vehicle: vehicle.data[0],
             });
-        }).catch(err => {
-            console.log(err);
         });
     }
 

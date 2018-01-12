@@ -4,7 +4,7 @@ import Divider from 'material-ui/Divider';
 import { Route } from 'react-router'
 import StoreItem from '../StoreItem';
 import Subheader from 'material-ui/Subheader';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -27,10 +27,10 @@ class EmployeeHome extends Component {
     }
 
     loadData() {
-        axios.get('http://localhost:3001/stores').then(response => {
+        axiosWrapper.get('http://localhost:3001/stores').then(response => {
             this.setState({stores: response.data});
 
-            axios.get('http://localhost:3001/statistics/count_vehicles').then(response => {
+            axiosWrapper.get('http://localhost:3001/statistics/count_vehicles').then(response => {
                 const state = this.state;
                 response.data.forEach(storeInfo => {
                     state.stores.forEach(store => {
@@ -44,7 +44,7 @@ class EmployeeHome extends Component {
             });
         });
 
-        axios.get('http://localhost:3001/statistics/good_clients')
+        axiosWrapper.get('http://localhost:3001/statistics/good_clients')
             .then(res => {
                 this.setState({bestCustomers: res.data});
             });
@@ -70,7 +70,7 @@ class EmployeeHome extends Component {
             }
         });
 
-        axios.get('http://localhost:3001/clients/', {params})
+        axiosWrapper.get('http://localhost:3001/clients/', {params})
             .then(res => {
                 this.setState({customers: res.data});
             });

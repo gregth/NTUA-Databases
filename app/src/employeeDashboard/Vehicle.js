@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
@@ -47,23 +47,19 @@ class Vehicle extends Component {
             data.last_seen_at = data.store_id;
         }
 
-        axios.put('http://localhost:3001/vehicles/' + this.state.vehicle_id, data)
+        axiosWrapper.put('http://localhost:3001/vehicles/' + this.state.vehicle_id, data)
             .then(res => {
                 if (res.data.affectedRows) {
                     alert('Vehicle updated successfully.');
                 }
-            }).catch(e => {
-                alert(e);
             });
     }
 
     handleRemove = () => {
-        axios.delete('http://localhost:3001/vehicles/' + this.state.vehicle_id)
+        axiosWrapper.delete('http://localhost:3001/vehicles/' + this.state.vehicle_id)
             .then(res => {
                 alert('Vehicle deleted successfully.');
                 this.props.refreshData();
-            }).catch(e => {
-                alert(e);
             });
     }
 

@@ -5,7 +5,7 @@ import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Vehicle from './Vehicle';
 import AddVehicleDialog from './AddVehicleDialog';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -37,26 +37,22 @@ class Store extends Component {
     handleNewVehicle = (data) => {
         data.last_seen_at = +this.props.match.params.storeId;
         data.store_id = +this.props.match.params.storeId;
-        axios.post('http://localhost:3001/vehicles', data)
+        axiosWrapper.post('http://localhost:3001/vehicles', data)
             .then(res => {
                 alert('Vehicle added successfully');
                 this.handleDialogClose();
                 this.loadData();
-            })
-            .catch(e => {
-                alert(e);
-                console.log(e);
             });
     }
 
     loadData = () => {
         const {storeId} = this.props.match.params;
 
-        axios.get('http://localhost:3001/stores/' + storeId).then(response => {
+        axiosWrapper.get('http://localhost:3001/stores/' + storeId).then(response => {
             this.setState({details: response.data, dataReady: true});
         });
 
-        axios.get('http://localhost:3001/contacts/?store_id=' + storeId).then(response => {
+        axiosWrapper.get('http://localhost:3001/contacts/?store_id=' + storeId).then(response => {
             const phones = [];
             const emails = [];
             response.data.forEach(item => {
@@ -73,7 +69,7 @@ class Store extends Component {
         const vehicleParams = {
             store_id: this.props.match.params.storeId
         };
-        axios.get('http://localhost:3001/vehicles', {params: vehicleParams})
+        axiosWrapper.get('http://localhost:3001/vehicles', {params: vehicleParams})
             .then(res => {
                 this.setState({vehicles: res.data});
             });

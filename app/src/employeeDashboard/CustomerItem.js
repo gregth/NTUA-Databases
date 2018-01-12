@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 
 class CustomerItem extends Component {
     handleRemove = () => {
-        axios.delete('http://localhost:3001/clients/' + this.props.customer.client_id)
+        axiosWrapper.delete('http://localhost:3001/clients/' + this.props.customer.client_id)
             .then(() => {
                 this.props.refreshData();
             });

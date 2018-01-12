@@ -3,7 +3,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import DatePicker from 'material-ui/DatePicker';
 import moment from 'moment';
-import axios from 'axios';
+import axiosWrapper from './axiosWrapper';
 
 class EditReservationDialog extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class EditReservationDialog extends Component {
         reservation.start_date = moment(reservation.start_date).format('YYYY-MM-DD HH:mm:ss')
         reservation.end_date = moment(reservation.end_date).format('YYYY-MM-DD HH:mm:ss')
 
-        axios.put('http://localhost:3001/reservations/' + reservation.reservation_id, reservation)
+        axiosWrapper.put('http://localhost:3001/reservations/' + reservation.reservation_id, reservation)
             .then(() => {
                 this.props.handleDialogClose();
                 this.props.refreshData();

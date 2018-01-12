@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
 import ReservationItem from '../ReservationItem';
 import RentalItem from './RentalItem';
-import axios from 'axios';
+import axiosWrapper from '../axiosWrapper';
 
 class Customer extends Component {
     constructor(props) {
@@ -35,22 +35,22 @@ class Customer extends Component {
     loadData() {
         const {customerId} = this.props.match.params;
 
-        axios.get('http://localhost:3001/clients/' + customerId).then(response => {
+        axiosWrapper.get('http://localhost:3001/clients/' + customerId).then(response => {
             const client = response.data;
             this.setState({details: client, dataReady: true});
 
             if (client.license_id) {
-                axios.get('http://localhost:3001/licenses/' + client.license_id).then(response => {
+                axiosWrapper.get('http://localhost:3001/licenses/' + client.license_id).then(response => {
                     this.setState({license: response.data});
                 });
             }
         });
 
-        axios.get('http://localhost:3001/reservations/?client_id=' + customerId).then(response => {
+        axiosWrapper.get('http://localhost:3001/reservations/?client_id=' + customerId).then(response => {
             this.setState({reservations: response.data});
         });
 
-        axios.get('http://localhost:3001/rentals/?client_id=' + customerId).then(response => {
+        axiosWrapper.get('http://localhost:3001/rentals/?client_id=' + customerId).then(response => {
             this.setState({rentals: response.data});
         });
     }
@@ -81,7 +81,7 @@ class Customer extends Component {
 
         const data = Object.assign({}, this.state.details);
         delete data.license_id; // license will be edited from elsewere
-        axios.put('http://localhost:3001/clients/' + customerId, data)
+        axiosWrapper.put('http://localhost:3001/clients/' + customerId, data)
             .then(res => {
                 alert('User has been updated successfully.');
             });
@@ -91,17 +91,17 @@ class Customer extends Component {
         const {customerId} = this.props.match.params;
 
         if (!this.state.details.license_id) {
-            axios.post('http://localhost:3001/licenses/', this.state.license)
+            axiosWrapper.post('http://localhost:3001/licenses/', this.state.license)
                 .then(res => {
                     const insertId = res.data.resource_id;
 
-                    return axios.put('http://localhost:3001/clients/' + customerId, {license_id: insertId});
+                    return axiosWrapper.put('http://localhost:3001/clients/' + customerId, {license_id: insertId});
                 })
                 .then(res => {
                     alert('The license has been inserted successfully.');
                 });
         } else {
-            axios.put('http://localhost:3001/licenses/' + this.state.license.license_id, this.state.license)
+            axiosWrapper.put('http://localhost:3001/licenses/' + this.state.license.license_id, this.state.license)
                 .then(res => {
                     alert('License information has been updated successfully.');
                 });
