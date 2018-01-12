@@ -55,7 +55,19 @@ class Statistics extends Routable {
                 console.log(e);
                 res.send(e);
             }
-        } else {
+        } else if (req.params.type == 'income') {
+            let query = `SELECT * from income_per_store`;
+            try {
+                [result] = await this.db.execute(query);
+                res.status(200);
+                res.send(result);
+            } catch(e) {
+                res.status(500);
+                console.log(e);
+                res.send(e);
+            }
+        }
+        else {
             res.status(400);
             res.send("Not found");
         }
