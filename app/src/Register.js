@@ -19,7 +19,7 @@ class Register extends Component {
             postal_code: '',
             city: '',
             country: '',
-            identity_type: 0,
+            identity_type: 'identity',
             identity_number: '',
             email: '',
             password: '',
@@ -59,7 +59,7 @@ class Register extends Component {
             {name: 'postal_code', label: 'Postal Code'},
             {name: 'city', label: 'City'},
             {name: 'country', label: 'Country'},
-            {name: 'identity_type', label: 'Identity Type', options: ['Identity Card', 'Passport']},
+            {name: 'identity_type', label: 'Identity Type', options: [{value: 'identity', label: 'Identity Card'}, {value: 'passport', label: 'Passport'}]},
             {name: 'identity_number', label: 'Identification Number'},
             {name: 'email', label: 'Email'},
             {name: 'password', label: 'Password'},
@@ -69,7 +69,7 @@ class Register extends Component {
             if (item.options) {
                 const {options} = item;
 
-                const optionsElements = options.map((item, index) => <MenuItem key={index} value={index} primaryText={item} />);
+                const optionsElements = options.map((item, index) => <MenuItem key={item.value} value={item.value} primaryText={item.label} />);
 
                 return (
                     <DropDownMenu
