@@ -45,7 +45,7 @@ class CustomerItem extends Component {
                     </List>
 				</CardText>
 				<CardActions style={{textAlign: 'center'}}>
-					<RaisedButton href={'/employee/customer/' + customer.client_id} label='Edit'/>
+					<RaisedButton href={'/employee/customer/' + customer.client_id} label='View'/>
 					<RaisedButton backgroundColor='#900' labelColor='#fff' label='Remove' onClick={this.handleRemove} />
 				</CardActions>
             </Card>
