@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import {List, ListItem} from 'material-ui/List';
+import {List} from 'material-ui/List';
 import axiosWrapper from '../axiosWrapper';
 import moment from 'moment';
 import TextField from 'material-ui/TextField';
@@ -15,7 +15,7 @@ class Vehicle extends Component {
         this.state = {
             vehicle_id: data.vehicle_id,
             details: data.vehicle,
-            atOwnerStore: data.vehicle.store_id == data.vehicle.last_seen_at,
+            atOwnerStore: +data.vehicle.store_id === +data.vehicle.last_seen_at,
 			dialogOpen: false,
             bookingStatus: 'idle',
         };

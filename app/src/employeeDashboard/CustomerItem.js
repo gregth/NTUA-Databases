@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Card, CardActions, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {List, ListItem} from 'material-ui/List';
 import axiosWrapper from '../axiosWrapper';
-import moment from 'moment';
 
 class CustomerItem extends Component {
     handleRemove = () => {

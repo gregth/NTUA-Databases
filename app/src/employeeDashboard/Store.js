@@ -6,8 +6,6 @@ import Subheader from 'material-ui/Subheader';
 import Vehicle from './Vehicle';
 import AddVehicleDialog from './AddVehicleDialog';
 import axiosWrapper from '../axiosWrapper';
-import moment from 'moment';
-import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class Store extends Component {
@@ -56,9 +54,9 @@ class Store extends Component {
             const phones = [];
             const emails = [];
             response.data.forEach(item => {
-                if (item.type == 'telephone') {
+                if (item.type === 'telephone') {
                     phones.push(item.value);
-                } else if (item.type == 'email') {
+                } else if (item.type === 'email') {
                     emails.push(item.value);
                 }
             })

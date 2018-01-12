@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
-import moment from 'moment';
 
 class EndRentalId extends Component {
     constructor(props) {

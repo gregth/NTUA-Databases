@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route } from 'react-router'
-import Register from './Register';
-import Home from './Home';
-import Store from './Store';
-import EmployeeRouter from './EmployeeRouter';
-import Customer from './employeeDashboard/Customer';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -30,7 +24,7 @@ class Login extends Component {
         const {userType} = this.props.match.params;
 
         localStorage.setItem(userType + 'Id', this.state.id);
-        if (userType == 'employee') {
+        if (userType === 'employee') {
             this.props.history.push('/employee/home');
         } else {
             this.props.history.push('/home');

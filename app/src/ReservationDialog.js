@@ -80,7 +80,7 @@ class ReservationDialog extends Component {
 
         let inputElements = fields.map((item, index) => {
             let disabled = false;
-            if (!this.state.company && item.name == 'trn') {
+            if (!this.state.company && item.name === 'trn') {
                 disabled = true;
             }
 
@@ -109,7 +109,7 @@ class ReservationDialog extends Component {
                 open={this.props.open}
                 onRequestClose={this.props.handleDialogClose}
             >
-                {this.props.bookingStatus == 'error' ? (
+                {this.props.bookingStatus === 'error' ? (
                     <span style={{color: '#900', display: 'block'}}>There was an error saving the reservation. Try again.</span>
                 ) : ''}
                 {this.props.bookingStatus !== 'success' ? (

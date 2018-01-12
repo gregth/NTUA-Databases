@@ -38,8 +38,8 @@ class EditReservationDialog extends Component {
 
     handleDateChange(type, event, date) {
         const state = this.state;
-        this.state.reservation[type] = date;
-        this.state.reservation.amount = this.getTotalAmount(state);
+        state.reservation[type] = date;
+        state.reservation.amount = this.getTotalAmount(state);
 
         this.setState(state);
     }

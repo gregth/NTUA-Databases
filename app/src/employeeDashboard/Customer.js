@@ -68,7 +68,7 @@ class Customer extends Component {
     handleInputChange = (event, value) => {
         event.persist();
         const state = this.state;
-        if (event.target.name == 'license_number') {
+        if (event.target.name === 'license_number') {
             state.license[event.target.name] = value;
         } else {
             state.details[event.target.name] = value;

@@ -89,7 +89,7 @@ class Register extends Component {
                     onChange={this.handleInputChange}
                     value={this.state[item.name]}
                     fullWidth
-                    type={item.name == 'password' ? 'password' : 'text'}
+                    type={item.name === 'password' ? 'password' : 'text'}
                     floatingLabelText={item.label}
                     floatingLabelFixed={true}
                 />);

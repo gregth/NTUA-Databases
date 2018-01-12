@@ -34,9 +34,9 @@ class Store extends Component {
             const phones = [];
             const emails = [];
             response.data.forEach(item => {
-                if (item.type == 'telephone') {
+                if (item.type === 'telephone') {
                     phones.push(item.value);
-                } else if (item.type == 'email') {
+                } else if (item.type === 'email') {
                     emails.push(item.value);
                 }
             })

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import {Card, CardMedia} from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
-import { Route } from 'react-router'
 import StoreItem from '../StoreItem';
 import Subheader from 'material-ui/Subheader';
 import axiosWrapper from '../axiosWrapper';
-import moment from 'moment';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CustomerItem from './CustomerItem';
@@ -34,7 +32,7 @@ class EmployeeHome extends Component {
                 const state = this.state;
                 response.data.forEach(storeInfo => {
                     state.stores.forEach(store => {
-                        if (store.store_id == storeInfo.store_id) {
+                        if (store.store_id === storeInfo.store_id) {
                             store.vehicle_count = storeInfo.count;
                         }
                     });

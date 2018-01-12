@@ -5,7 +5,6 @@ import Register from './Register';
 import Home from './Home';
 import Store from './Store';
 import EmployeeRouter from './EmployeeRouter';
-import Customer from './employeeDashboard/Customer';
 import Login from './Login';
 
 class App extends Component {
